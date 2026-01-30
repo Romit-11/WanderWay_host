@@ -33,7 +33,6 @@ app.use("/uploads", express.static("uploads"));
 // EJS
 app.set("view engine", "ejs");
 
-// ================= SESSION =================
 
 app.use(
   session({
@@ -47,13 +46,11 @@ app.use(
   })
 );
 
-// User available in EJS
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   next();
 });
 
-// ================= ROUTES =================
 
 app.use("/", require("./routes/main"));
 
@@ -62,8 +59,6 @@ app.use("/admin", adminRoutes);
 
 const galleryRoutes = require("./routes/gallery");
 app.use("/gallery", galleryRoutes);
-
-// ================= SERVER =================
 
 const PORT = process.env.PORT || 5000;
 
