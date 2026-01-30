@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WanderWay - Blog</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="blog-bg">
+  <%- include("partials/navbar") %>
+
+  <section class="page-header">
+    <h2 class="page-title">Travel Blog</h2>
+    <p>Share your travel stories with the community</p>
+  </section>
+
+  <% if (user) { %>
+    <section class="form-container">
+      <h3>Add a Blog Post</h3>
+      <form action="/blog" method="POST">
+        <input type="text" name="title" placeholder="Blog Title" required>
+        <textarea name="content" placeholder="Write your story..." required></textarea>
+        <button type="submit">Post</button>
+      </form>
+    </section>
+  <% } %>
+
+  <div class="blog-list">
+  <% if (blogs && blogs.length > 0) { %>
+    <% blogs.forEach(blog => { %>
+      <div class="blog-item">
+        <h3><%= blog.title %></h3>
+        <p><%= blog.content %></p>
+        <small>By <%= blog.author %> on <%= blog.createdAt.toDateString() %></small>
+
+        <% if (user && user._id.toString() === blog.authorId.toString()) { %>
+          <!-- Edit button -->
+          <form action="/blog/edit/<%= blog._id %>" method="get" style="display:inline;">
+            <button type="submit">Edit</button>
+          </form>
+
+          <!-- Delete button -->
+          <form action="/blog/delete/<%= blog._id %>" method="post" style="display:inline;">
+            <button type="submit" onclick="return confirm('Delete this blog?')">Delete</button>
+          </form>
+        <% } %>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <p>No blogs yet.</p>
+  <% } %>
+</div>
+
+<footer class="footer">
+      <p>© 2025 WanderWay. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

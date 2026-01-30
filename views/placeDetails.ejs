@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= place.name %> - WanderWay</title>
+  <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+</head>
+
+<body class="place-bg">
+
+<%- include("partials/navbar") %>
+
+<div class="details-container modern-card">
+
+  <h1 class="place-title">
+    <%= place.name %>
+  </h1>
+
+  <p class="loc">
+    <i class="fa-solid fa-location-dot"></i>
+    <%= place.location %>
+  </p>
+
+  <!-- Images -->
+  <div class="images-gallery">
+    <% place.images.forEach(img => { %>
+      <img src="/uploads/<%= img %>" alt="<%= place.name %>">
+    <% }) %>
+  </div>
+
+  <!-- Description -->
+  <p class="desc"><%= place.description %></p>
+
+  <!-- Hotels -->
+  <!-- Action Buttons -->
+<div class="action-btns">
+
+  <!-- View Hotels -->
+  <a 
+    href="/hotels?location=<%= encodeURIComponent(place.location) %>" 
+    class="hotel-btn"
+  >
+    🏨 View Nearby Hotels
+  </a>
+
+  <!-- View Location on Google Maps -->
+  <a 
+    href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(place.location) %>" 
+    target="_blank"
+    class="map-btn"
+  >
+    <i class="fa-solid fa-location-dot"></i> View Location
+  </a>
+
+</div>
+
+
+</div>
+
+<!-- WEATHER -->
+<h2 class="section-title">🌦️ Current Weather</h2>
+
+<% if (weather) { %>
+  <div class="weather-box modern-card">
+    <img src="https://openweathermap.org/img/wn/<%= weather.icon %>@2x.png">
+    <p><strong><%= weather.condition %></strong> (<%= weather.description %>)</p>
+    <p>🌡️ Temperature: <%= weather.temp %> °C</p>
+    <p>🤗 Feels Like: <%= weather.feels_like %> °C</p>
+    <p>💧 Humidity: <%= weather.humidity %>%</p>
+    <p>🌬️ Wind Speed: <%= weather.wind %> m/s</p>
+  </div>
+<% } %>
+
+<!-- FORECAST -->
+<h2 class="section-title">📅 5-Day Forecast</h2>
+
+<% if (forecast && forecast.length > 0) { %>
+  <div class="forecast-container">
+    <% forecast.forEach(day => { %>
+      <div class="forecast-card modern-card">
+        <p><strong><%= day.date %></strong></p>
+        <img src="https://openweathermap.org/img/wn/<%= day.icon %>.png">
+        <p><%= day.temp %> °C</p>
+        <small><%= day.desc %></small>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+</body>
+</html>

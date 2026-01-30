@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hotels near <%= place.name %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<%- include("partials/navbar") %>
+
+<h2>🏨 Hotels near <%= place.name %></h2>
+
+<% if (adminHotels.length > 0) { %>
+  <% adminHotels.forEach(hotel => { %>
+    <div class="hotel-card">
+      <h3><%= hotel.name %></h3>
+      <p>📍 <%= hotel.location %></p>
+      <p>💰 ₹ <%= hotel.price %></p>
+
+      <!-- Booking.com redirect -->
+      <a 
+        href="https://www.booking.com/searchresults.html?ss=<%= encodeURIComponent(place.location) %>" 
+        target="_blank">
+        <button class="book-btn">Book Now</button>
+      </a>
+    </div>
+  <% }) %>
+<% } else { %>
+  <p>No admin-listed hotels found for this location.</p>
+<% } %>
+
+</body>
+</html>

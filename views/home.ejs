@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WanderWay - Home</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <%- include("partials/navbar") %>
+
+
+  <section class="hero hero-bg">
+    <h1>Welcome to WanderWay</h1>
+    <p>Your ultimate travel companion.</p>
+    <a href="#trending" class="explore-btn">Explore Now</a>
+  </section>
+
+
+  <section class="counter-section counter-bg reveal">
+  <div class="counter-box">
+    <i class="fa-solid fa-map-location-dot"></i>
+    <h2 class="counter" data-target="120">0</h2>
+    <p>Destinations</p>
+  </div>
+
+  <div class="counter-box">
+    <i class="fa-solid fa-image"></i>
+    <h2 class="counter" data-target="850">0</h2>
+    <p>Travel Memories</p>
+  </div>
+
+  <div class="counter-box">
+    <i class="fa-solid fa-hotel"></i>
+    <h2 class="counter" data-target="300">0</h2>
+    <p>Hotels Listed</p>
+  </div>
+
+  <div class="counter-box">
+    <i class="fa-solid fa-face-smile"></i>
+    <h2 class="counter" data-target="1500">0</h2>
+    <p>Happy Travelers</p>
+  </div>
+</section>
+
+
+
+<section id="trending" class="home-section trending-bg reveal">
+  <h2 class="section-title">🌍 Trending Places</h2>
+
+  <div class="trending-container">
+    <% trending.forEach(t => { %>
+      <div class="trend-card">
+        <a href="/place/<%= t._id %>">
+          <img src="/uploads/<%= t.images[0] %>" alt="<%= t.name %>">
+          <div class="trend-overlay">
+            <h3><%= t.name %></h3>
+            <p><%= t.location %></p>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+
+<section class="home-section news-bg reveal">
+<h2 class="page-title">📰 Travel & Hotel News</h2>
+
+<% if (travelNews && travelNews.length > 0) { %>
+  <div class="news-container">
+    <% travelNews.forEach(news => { %>
+      <div class="news-card">
+        <% if (news.image) { %>
+          <img src="<%= news.image %>" alt="news image">
+        <% } %>
+
+        <h3><%= news.title %></h3>
+        <p><%= news.description %></p>
+
+        <a href="<%= news.url %>" target="_blank">
+          Read More →
+        </a>
+      </div>
+    <% }) %>
+  </div>
+<% } else { %>
+  <p>No travel news available.</p>
+<% } %>
+</section>
+
+ <section class="section">
+    <h2>Why Choose WanderWay?</h2>
+    <p>We make your travel easy and memorable. From beautiful destinations to luxurious hotels, WanderWay is your one-stop travel partner.</p>
+  </section>
+
+
+
+  <footer class="footer">
+    <p>© 2025 WanderWay. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+  const counters = document.querySelectorAll('.counter');
+  let counterStarted = false;
+
+  function startCounters() {
+    if (counterStarted) return;
+    counterStarted = true;
+
+    counters.forEach(counter => {
+      const target = +counter.getAttribute('data-target');
+      let count = 0;
+
+      const increment = target / 200;
+
+      const updateCounter = () => {
+        count += increment;
+        if (count < target) {
+          counter.innerText = Math.ceil(count);
+          requestAnimationFrame(updateCounter);
+        } else {
+          counter.innerText = target;
+        }
+      };
+
+      updateCounter();
+    });
+  }
+
+  // Start animation when section is visible
+  window.addEventListener('scroll', () => {
+    const section = document.querySelector('.counter-section');
+    const sectionTop = section.getBoundingClientRect().top;
+    const screenHeight = window.innerHeight;
+
+    if (sectionTop < screenHeight - 100) {
+      startCounters();
+    }
+  });
+</script>
+
+<script>
+  const reveals = document.querySelectorAll(".reveal");
+
+  const revealOnScroll = () => {
+    reveals.forEach(el => {
+      const top = el.getBoundingClientRect().top;
+      const windowHeight = window.innerHeight;
+
+      if (top < windowHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  };
+
+  window.addEventListener("scroll", revealOnScroll);
+  revealOnScroll();
+</script>
+
+
+</body>
+</html>

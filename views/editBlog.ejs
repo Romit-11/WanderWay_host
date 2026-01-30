@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Blog</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Edit Blog</h2>
+    <form action="/blog/edit/<%= blog._id %>" method="POST">
+      <input type="text" name="title" value="<%= blog.title %>" required />
+      <textarea name="content" rows="5" required><%= blog.content %></textarea>
+      <button type="submit">Update</button>
+    </form>
+    <a href="/blog">← Back to Blogs</a>
+  </div>
+</body>
+</html>

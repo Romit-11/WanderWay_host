@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blog</title>
+</head>
+<body>
+    <h2>All Blogs</h2>
+
+<% blogs.forEach(b => { %>
+  <div class="blog-item">
+    <h3><%= b.title %></h3>
+    <small>By <%= b.author %></small>
+    <p><%= b.content %></p>
+
+    <form action="/admin/blogs/delete/<%= b._id %>" method="POST">
+      <button>Delete</button>
+    </form>
+  </div>
+<% }) %>
+
+</body>
+</html>

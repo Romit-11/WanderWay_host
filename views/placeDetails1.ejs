@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= place.name %> - Details</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<%- include("partials/navbar") %>
+
+<div class="details-container">
+
+  <h1><%= place.name %></h1>
+
+  <div class="images-gallery">
+    <% place.images.forEach(img => { %>
+      <img src="/uploads/<%= img %>" alt="<%= place.name %>">
+    <% }) %>
+  </div>
+
+  <p class="desc"><%= place.description %></p>
+
+  <p class="loc"><strong>Location:</strong> <%= place.location %></p>
+
+  
+  <p class="hotel"><strong>Nearby Hotel:</strong> <%= place.nearbyHotel %></p>
+
+  <a href="/place/<%= place._id %>/hotels">
+  <button class="hotel-btn">🏨 View Hotels</button>
+</a>
+
+</div>
+
+
+<h2>🌦️ Current Weather</h2>
+
+<% if (weather) { %>
+  <div class="weather-box">
+    <img 
+      src="https://openweathermap.org/img/wn/<%= weather.icon %>@2x.png" 
+      alt="weather icon"
+    >
+    <p><strong><%= weather.condition %></strong> (<%= weather.description %>)</p>
+    <p>🌡️ Temperature: <%= weather.temp %> °C</p>
+    <p>🤗 Feels Like: <%= weather.feels_like %> °C</p>
+    <p>💧 Humidity: <%= weather.humidity %>%</p>
+    <p>🌬️ Wind Speed: <%= weather.wind %> m/s</p>
+  </div>
+<% } else { %>
+  <p>Weather information not available.</p>
+<% } %>
+
+
+<h2>📅 5-Day Forecast</h2>
+
+<% if (typeof forecast !== "undefined" && forecast.length > 0) { %>
+
+  <div class="forecast-container">
+    <% forecast.forEach(day => { %>
+      <div class="forecast-card">
+        <p><strong><%= day.date %></strong></p>
+        <img src="https://openweathermap.org/img/wn/<%= day.icon %>.png" alt="weather">
+        <p><%= day.temp %> °C</p>
+        <small><%= day.desc %></small>
+      </div>
+    <% }) %>
+  </div>
+
+<% } else { %>
+  <p>5-day forecast not available.</p>
+<% } %>
+
+
+
+
+</body>
+</html>

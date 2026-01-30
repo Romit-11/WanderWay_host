@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotels - WanderWay</title>
+  <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+</head>
+<body class="hotels-bg">
+  <%- include("partials/navbar") %>
+
+<div class="container">
+
+  <h1 class="page-title">Hotels</h1>
+
+  <% if (localHotels && localHotels.length > 0) { %>
+  <% localHotels.forEach(hotel => { %>
+    <div class="hotel-card">
+      <h3><%= hotel.name %></h3>
+      <p><i class="fa-solid fa-location-dot"></i> <%= hotel.location %></p>
+      <p>💰 ₹ <%= hotel.price %></p>
+
+      <!-- Booking.com redirect -->
+      <a
+        href="https://www.booking.com/searchresults.html?ss=<%= encodeURIComponent(hotel.location) %>"
+        target="_blank">
+        <button class="book-btn">Book Hotel</button>
+      </a>
+    </div>
+  <% }) %>
+<% } else { %>
+  <p>No hotels available.</p>
+<% } %>
+
+</div>
+
+<footer class="footer">
+  © 2025 WanderWay
+</footer>
+
+</body>
+</html>

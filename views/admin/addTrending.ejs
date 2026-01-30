@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trending-Place_Admin</title>
+</head>
+<body>
+    <h2>Add Trending Place</h2>
+
+<form action="/admin/add-trending" method="POST" enctype="multipart/form-data">
+  <input type="text" name="name" placeholder="Place Name" required>
+  <textarea name="description" placeholder="Description" required></textarea>
+  <input type="text" name="location" placeholder="Location" required>
+  <input type="text" name="nearbyHotel" placeholder="Nearby Hotel" required>
+
+<label>Upload Images</label>
+<input type="file" name="images" multiple required>
+
+
+  <button type="submit">Add</button>
+</form>
+
+</body>
+</html>

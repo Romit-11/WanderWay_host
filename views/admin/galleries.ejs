@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>galleries</title>
+</head>
+<body>
+    <h2>Gallery Uploads</h2>
+
+<% galleries.forEach(g => { %>
+  <div class="gallery-item">
+    <img src="/uploads/<%= g.images[0] %>" width="150">
+    <p>📍 <%= g.location %></p>
+    <p>By <%= g.uploadedBy %></p>
+
+    <form action="/admin/galleries/delete/<%= g._id %>" method="POST">
+      <button>Delete</button>
+    </form>
+  </div>
+<% }) %>
+
+</body>
+</html>

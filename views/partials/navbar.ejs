@@ -1,0 +1,16 @@
+<nav class="navbar">
+  <div class="nav-left">WanderWay</div>
+  <div class="nav-right">
+    <a href="/">Home</a>
+    <a href="/gallery">Gallery</a>
+    <a href="/blog">Blog</a>
+    <a href="/hotels">Hotels</a>
+
+    <% if (user) { %>
+      <span style="margin-left:15px; color:#ffd700;">Hi, <%= user.username %></span>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+    <% } %>
+  </div>
+</nav>

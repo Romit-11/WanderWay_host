@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tranding-Place-List_Admin</title>
+</head>
+<body>
+  <h2>Trending Places</h2>
+
+<a href="/admin/dashboard">
+    <button>⬅ Back to Dashboard</button>
+</a>
+
+<table border="1">
+  <tr>
+    <th>Image</th>
+    <th>Name</th>
+    <th>Location</th>
+    <th>Hotel</th>
+    <th>Actions</th>
+  </tr>
+
+  <% places.forEach(p => { %>
+  <tr>
+
+    <td>
+      <% if (p.images && p.images.length > 0) { %>
+        <img src="/uploads/<%= p.images[0] %>" width="120">
+      <% } else { %>
+        No Image
+      <% } %>
+    </td>
+
+    <td><%= p.name %></td>
+    <td><%= p.location %></td>
+    <td><%= p.nearbyHotel %></td>
+
+    <td>
+      <form action="/admin/delete-trending/<%= p._id %>" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+
+  </tr>
+  <% }) %>
+</table>
+
+</body>
+</html>
