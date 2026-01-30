@@ -7,64 +7,66 @@ const MongoStore = require("connect-mongo");
 
 const app = express();
 
-// MONGODB CONNECTION
-mongoose.connect("mongodb://127.0.0.1:27017/wanderway", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+// ================= MONGODB CONNECTION =================
+
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 })
 .then(() => console.log("✅ MongoDB Connected"))
 .catch(err => console.log(err));
 
-
-// MIDDLEWARES
+// ================= MIDDLEWARES =================
 
 // Parse form data
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Parse JSON (REQUIRED FOR APIs)
+// Parse JSON
 app.use(express.json());
 
-// Serve public folder
+// Public folder
 app.use(express.static("public"));
 
-// Serve uploaded images (MUST BE BEFORE ROUTES)
+// Uploads folder
 app.use("/uploads", express.static("uploads"));
 
-// Set ejs as template engine
+// EJS
 app.set("view engine", "ejs");
 
+// ================= SESSION =================
 
-// SESSION SETUP
 app.use(
   session({
     secret: "wanderway-secret",
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
-      mongoUrl: "mongodb://127.0.0.1:27017/wanderway",
+      mongoUrl: process.env.MONGO_URI,
     }),
-    cookie: { maxAge: 1000 * 60 * 60 }, // 1 hour
+    cookie: { maxAge: 1000 * 60 * 60 },
   })
 );
 
-
-// MAKE USER AVAILABLE IN EJS
+// User available in EJS
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   next();
 });
 
+// ================= ROUTES =================
 
-// ROUTES
 app.use("/", require("./routes/main"));
-app.use("/admin", require("./routes/admin"));
-app.use("/gallery", require("./routes/gallery"));
+
 const adminRoutes = require("./routes/admin");
 app.use("/admin", adminRoutes);
 
+const galleryRoutes = require("./routes/gallery");
+app.use("/gallery", galleryRoutes);
 
-// START SERVER
-const PORT = 5000;
+// ================= SERVER =================
+
+const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
-  console.log(`🚀 WanderWay running at http://localhost:${PORT}`);
+  console.log(`🚀 WanderWay running on port ${PORT}`);
 });
