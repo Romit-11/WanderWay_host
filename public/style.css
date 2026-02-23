@@ -40,7 +40,7 @@ body {
 }
 
 .nav-right a:hover {
-  color: #ffd700;
+  color:goldenrod;
 }
 
 /* Hero Section */
@@ -225,8 +225,9 @@ body {
 /* Hotels */
 .hotel-list {
   margin-top: 40px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  
+  /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
   gap: 20px;
 }
 .hotel-card {
@@ -1204,7 +1205,7 @@ a, button {
 .hotels-bg {
   min-height: 100vh;
   background: linear-gradient(
-      rgba(0,0,0,0.55),
+      rgba(50, 47, 47, 0.55),
       rgba(0,0,0,0.55)
     ),
     url("https://images.unsplash.com/photo-1566073771259-6a8506099945");
@@ -1490,9 +1491,7 @@ html {
 }
 
 
-/* =========================
-   PLACE DETAILS – FINAL FIX
-========================= */
+/* PLACE DETAILS FIX*/
 
 /* Background */
 .place-details-bg {
@@ -1614,7 +1613,7 @@ html {
   background: #0077cc;
   color: #fff;
   padding: 14px 26px;
-  border-radius: 30px;
+  border-radius: 8px;
   text-decoration: none;
   font-size: 16px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
