@@ -16,21 +16,16 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("✅ MongoDB Connected"))
 .catch(err => console.log(err));
 
-// ================= MIDDLEWARES =================
+// MIDDLEWARES 
 
-// Parse form data
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Parse JSON
 app.use(express.json());
 
-// Public folder
 app.use(express.static("public"));
 
-// Uploads folder
 app.use("/uploads", express.static("uploads"));
 
-// EJS
 app.set("view engine", "ejs");
 
 
