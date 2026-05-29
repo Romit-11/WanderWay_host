@@ -1358,7 +1358,8 @@ section { padding:80px 24px; }
     url("https://images.unsplash.com/photo-1521791136064-7986c2920216")
     center/cover fixed;
   position:relative;
-  display:flex; justify-content:center; align-items:center; padding:24px;
+  display:flex;
+  flex-direction:column;
 }
 .admin-bg::before {
   content:""; position:absolute; inset:0;
@@ -1372,7 +1373,7 @@ section { padding:80px 24px; }
 
 .admin-login-container {
   background:rgba(255,255,255,.98); padding:52px 44px;
-  width:430px; max-width:100%; border-radius:var(--r-xl);
+  width:100%; max-width:440px; border-radius:var(--r-xl);
   box-shadow:var(--shadow-xl); text-align:center;
   animation:scaleIn .8s var(--ease); border-top:5px solid var(--orange);
   position:relative; z-index:2;
