@@ -2,57 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ZappIt - Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body class="blog-bg">
+
   <%- include("partials/navbar") %>
 
-  <section class="page-header">
-    <h2 class="page-title">Travel Blog</h2>
-    <p>Share your travel stories with the community</p>
-  </section>
-
-  <% if (user) { %>
-    <section class="form-container">
-      <h3>Add a Blog Post</h3>
-      <form action="/blog" method="POST">
-        <input type="text" name="title" placeholder="Blog Title" required>
-        <textarea name="content" placeholder="Write your story..." required></textarea>
-        <button type="submit">Post</button>
-      </form>
-    </section>
-  <% } %>
+  <!-- Page Header -->
+  <div class="page-header">
+    <span class="section-label" style="color:var(--orange-light)">Travel Stories</span>
+    <h2>Travel Blog</h2>
+    <p>Share your travel stories with the WanderWay community</p>
+  </div>
 
   <div class="blog-list">
-  <% if (blogs && blogs.length > 0) { %>
-    <% blogs.forEach(blog => { %>
-      <div class="blog-item">
-        <h3><%= blog.title %></h3>
-        <p><%= blog.content %></p>
-        <small>By <%= blog.author %> on <%= blog.createdAt.toDateString() %></small>
 
-        <% if (user && user._id.toString() === blog.authorId.toString()) { %>
-          <!-- Edit button -->
-          <form action="/blog/edit/<%= blog._id %>" method="get" style="display:inline;">
-            <button type="submit">Edit</button>
-          </form>
-
-          <!-- Delete button -->
-          <form action="/blog/delete/<%= blog._id %>" method="post" style="display:inline;">
-            <button type="submit" onclick="return confirm('Delete this blog?')">Delete</button>
-          </form>
-        <% } %>
+    <!-- Add Blog Form -->
+    <% if (user) { %>
+      <div class="form-container" style="margin-bottom:40px">
+        <h3>✍️ Share Your Story</h3>
+        <form action="/blog" method="POST">
+          <input type="text" name="title" placeholder="Blog Title" required>
+          <textarea name="content" placeholder="Write your travel story..." required></textarea>
+          <button type="submit">📝 Post Story</button>
+        </form>
       </div>
-    <% }); %>
-  <% } else { %>
-    <p>No blogs yet.</p>
-  <% } %>
-</div>
+    <% } %>
 
-<footer class="footer">
-      <p>© 2025 ZappIt. All Rights Reserved.</p>
-    </footer>
+    <!-- Blog List -->
+    <% if (blogs && blogs.length > 0) { %>
+      <% blogs.forEach(blog => { %>
+        <div class="blog-item">
+          <h3><%= blog.title %></h3>
+          <p><%= blog.content %></p>
+          <small>✍️ By <%= blog.author %> &nbsp;·&nbsp; <%= blog.createdAt.toDateString() %></small>
+
+          <% if (user && user._id.toString() === blog.authorId.toString()) { %>
+            <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+              <form action="/blog/edit/<%= blog._id %>" method="get" style="display:inline">
+                <button type="submit" class="btn" style="padding:7px 16px;font-size:13px;background:var(--orange-pale);color:var(--orange-dark);border:1px solid var(--border);border-radius:var(--r-pill)">✏️ Edit</button>
+              </form>
+              <form action="/blog/delete/<%= blog._id %>" method="post" style="display:inline">
+                <button type="submit" class="btn-danger" onclick="return confirm('Delete this blog?')">🗑 Delete</button>
+              </form>
+            </div>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="empty-msg" style="color:rgba(255,255,255,.7);text-align:center;padding:40px 0">No blogs yet. Be the first to share your story!</p>
+    <% } %>
+
+  </div>
+
+  <footer class="footer">
+    <strong>WanderWay</strong>
+    <p>© 2025 WanderWay. All Rights Reserved.</p>
+  </footer>
 
 </body>
 </html>

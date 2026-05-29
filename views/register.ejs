@@ -2,24 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register - ZappIt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
 </head>
-<body>
+<body class="user-login-bg">
+
   <%- include("partials/navbar") %>
 
-  <div class="auth-container">
-    <h2>Create Account</h2>
-    <% if (error) { %>
-      <p class="error"><%= error %></p>
-    <% } %>
-    <form method="POST" action="/register">
-      <input type="text" name="username" placeholder="Username" required />
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button type="submit">Register</button>
-    </form>
-    <p>Already have an account? <a href="/login">Login here</a></p>
+  <!-- Centre the card in the remaining viewport height -->
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 20px">
+    <div class="auth-container login-animate">
+
+      <h2>🌍 Create Account</h2>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:28px">Join thousands of travellers on WanderWay</p>
+
+      <% if (error) { %>
+        <p class="error"><%= error %></p>
+      <% } %>
+
+      <form method="POST" action="/register">
+        <div>
+          <label>Username</label>
+          <input type="text" name="username" placeholder="Your name" required>
+        </div>
+        <div>
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="you@example.com" required>
+        </div>
+        <div>
+          <label>Password</label>
+          <input type="password" name="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit">Create Account →</button>
+      </form>
+
+      <p>Already have an account? <a href="/login">Login here</a></p>
+
+    </div>
   </div>
+
 </body>
 </html>

@@ -2,34 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login - ZappIt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body class="user-login-bg">
 
   <%- include("partials/navbar") %>
 
-  <div class="auth-container login-animate">
-    <h2>✨ Welcome Back</h2>
+  <!-- Centre the card in the remaining viewport height -->
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 20px">
+    <div class="auth-container login-animate">
 
-    <% if (error) { %>
-      <p class="error"><%= error %></p>
-    <% } %>
+      <h2>✨ Welcome Back</h2>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:28px">Sign in to continue your journey ✈️</p>
 
-    <form method="POST" action="/login">
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
+      <% if (error) { %>
+        <p class="error"><%= error %></p>
+      <% } %>
 
-    <p>Don’t have an account? <a href="/register">Register here</a></p>
+      <form method="POST" action="/login">
+        <div>
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="you@example.com" required>
+        </div>
+        <div>
+          <label>Password</label>
+          <input type="password" name="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit">Login →</button>
+      </form>
 
-    <hr>
+      <p>Don't have an account? <a href="/register">Register here</a></p>
+      <hr>
+      <p class="admin-link">Are you an admin? <a href="/admin/login">Login as Admin</a></p>
 
-    <p class="admin-link">
-      Are you an admin?
-      <a href="/admin/login">Login as Admin</a>
-    </p>
+    </div>
   </div>
 
 </body>

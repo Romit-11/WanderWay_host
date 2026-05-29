@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>blog</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Blogs – WanderWay</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-    <h2>All Blogs</h2>
+<body class="admin-bg">
 
-<% blogs.forEach(b => { %>
-  <div class="blog-item">
-    <h3><%= b.title %></h3>
-    <small>By <%= b.author %></small>
-    <p><%= b.content %></p>
+  <div class="admin-overlay"></div>
 
-    <form action="/admin/blogs/delete/<%= b._id %>" method="POST">
-      <button>Delete</button>
-    </form>
+  <div class="admin-container">
+
+    <div class="admin-header">
+      <h1>📝 All Blogs</h1>
+      <a href="/admin/dashboard" class="logout-btn" style="background:linear-gradient(135deg,var(--orange-dark),var(--orange))">← Dashboard</a>
+    </div>
+
+    <div class="admin-grid">
+      <% blogs.forEach(b => { %>
+        <div class="admin-card">
+          <h3 style="font-size:17px"><%= b.title %></h3>
+          <p>✍️ By <%= b.author %></p>
+          <p style="font-size:12px;color:rgba(255,255,255,.55);margin-top:6px;flex:1"><%= b.content.substring(0, 100) %>...</p>
+          <form action="/admin/blogs/delete/<%= b._id %>" method="POST" style="margin-top:auto">
+            <button class="danger-btn">🗑 Delete</button>
+          </form>
+        </div>
+      <% }) %>
+    </div>
+
   </div>
-<% }) %>
 
 </body>
 </html>

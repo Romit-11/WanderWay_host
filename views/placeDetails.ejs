@@ -2,98 +2,92 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title><%= place.name %> - ZappIt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= place.name %> – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body class="place-bg">
 
-<%- include("partials/navbar") %>
+  <%- include("partials/navbar") %>
 
-<div class="details-container modern-card">
-
-  <h1 class="place-title">
-    <%= place.name %>
-  </h1>
-
-  <p class="loc">
-    <i class="fa-solid fa-location-dot"></i>
-    <%= place.location %>
-  </p>
-
-  <!-- Images -->
-  <div class="images-gallery">
-    <% place.images.forEach(img => { %>
-      <img src="/uploads/<%= img %>" alt="<%= place.name %>">
-    <% }) %>
+  <!-- Hero banner -->
+  <div style="min-height:45vh;display:flex;align-items:flex-end;justify-content:center;padding:48px 28px;text-align:center;position:relative;z-index:2">
+    <div style="animation:fadeUp .9s ease both">
+      <span class="section-label" style="color:var(--orange-light)"><%= place.location %></span>
+      <h1 style="font-family:var(--fd);font-size:clamp(36px,6vw,72px);font-weight:800;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.3);margin-bottom:10px"><%= place.name %></h1>
+      <p style="font-size:17px;color:rgba(255,255,255,.82)">Explore · Discover · Experience</p>
+    </div>
   </div>
 
-  <!-- Description -->
-  <p class="desc"><%= place.description %></p>
+  <!-- Main card -->
+  <div style="padding:0 24px"><div class="details-container modern-card" style="max-width:1000px;margin:0 auto 80px;padding:48px 52px">
 
-  <!-- Hotels -->
-  <!-- Action Buttons -->
-<div class="action-btns">
+    <h1 class="place-title"><%= place.name %></h1>
 
-  <!-- View Hotels -->
-  <a 
-    href="/hotels?location=<%= encodeURIComponent(place.location) %>" 
-    class="hotel-btn"
-  >
-    🏨 View Nearby Hotels
-  </a>
+    <p class="loc">
+      <i class="fa-solid fa-location-dot"></i>
+      <%= place.location %>
+    </p>
 
-  <!-- View Location on Google Maps -->
-  <a 
-    href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(place.location) %>" 
-    target="_blank"
-    class="map-btn"
-  >
-    <i class="fa-solid fa-location-dot"></i> View Location
-  </a>
+    <!-- Images -->
+    <div class="section-heading">Photos</div>
+    <div class="images-gallery">
+      <% place.images.forEach(img => { %>
+        <img src="/uploads/<%= img %>" alt="<%= place.name %>">
+      <% }) %>
+    </div>
 
-</div>
+    <!-- Description -->
+    <% if (place.description) { %>
+      <div class="section-heading">About</div>
+      <p class="desc"><%= place.description %></p>
+    <% } %>
 
-
-</div>
-
-<!-- WEATHER -->
-<h2 class="section-title">🌦️ Current Weather</h2>
-
-<% if (weather) { %>
-  <div class="weather-box modern-card">
-    <img src="https://openweathermap.org/img/wn/<%= weather.icon %>@2x.png">
-    <p><strong><%= weather.condition %></strong> (<%= weather.description %>)</p>
-    <p>🌡️ Temperature: <%= weather.temp %> °C</p>
-    <p>🤗 Feels Like: <%= weather.feels_like %> °C</p>
-    <p>💧 Humidity: <%= weather.humidity %>%</p>
-    <p>🌬️ Wind Speed: <%= weather.wind %> m/s</p>
-  </div>
-<% } %>
-
-<!-- FORECAST -->
-<h2 class="section-title">📅 5-Day Forecast</h2>
-
-<% if (forecast && forecast.length > 0) { %>
-  <div class="forecast-container">
-    <% forecast.forEach(day => { %>
-      <div class="forecast-card modern-card">
-        <p><strong><%= day.date %></strong></p>
-        <img src="https://openweathermap.org/img/wn/<%= day.icon %>.png">
-        <p><%= day.temp %> °C</p>
-        <small><%= day.desc %></small>
+    <!-- Weather -->
+    <% if (weather) { %>
+      <div class="section-heading">🌦️ Current Weather</div>
+      <div class="weather-box">
+        <img src="https://openweathermap.org/img/wn/<%= weather.icon %>@2x.png" style="margin:0 auto 8px;width:64px">
+        <div style="font-family:var(--fd);font-size:48px;font-weight:800;color:var(--text-dark);line-height:1"><%= weather.temp %>°C</div>
+        <div style="font-size:16px;font-weight:600;color:var(--text-body);margin-top:4px"><%= weather.condition %></div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:8px">
+          Feels like <%= weather.feels_like %>°C &nbsp;·&nbsp; Humidity <%= weather.humidity %>% &nbsp;·&nbsp; Wind <%= weather.wind %> m/s
+        </div>
       </div>
-    <% }) %>
+    <% } %>
+
+    <!-- Forecast -->
+    <% if (forecast && forecast.length > 0) { %>
+      <div class="section-heading">📅 5-Day Forecast</div>
+      <div class="forecast-container">
+        <% forecast.forEach(day => { %>
+          <div class="forecast-card">
+            <strong style="font-size:13px;color:var(--text-dark)"><%= day.date %></strong>
+            <img src="https://openweathermap.org/img/wn/<%= day.icon %>.png" style="margin:6px auto;width:44px">
+            <div style="font-size:16px;font-weight:700;color:var(--orange-dark)"><%= day.temp %>°C</div>
+            <small style="color:var(--text-muted)"><%= day.desc %></small>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <!-- Action buttons -->
+    <div class="action-btns" style="margin-top:36px">
+      <a href="/place/<%= place._id %>/hotels" class="hotel-btn">🏨 View Nearby Hotels</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(place.location) %>" target="_blank" class="map-btn">
+        <i class="fa-solid fa-location-dot"></i> View on Maps
+      </a>
+    </div>
+
   </div>
-<% } %>
+
+  </div><!-- /padding wrapper -->
+
+  <footer class="footer">
+    <strong>WanderWay</strong>
+    <p>© 2025 WanderWay. All Rights Reserved.</p>
+  </footer>
 
 </body>
 </html>

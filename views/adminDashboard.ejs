@@ -2,23 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard-ZappIt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; }
-    h2, h3 { color: #333; }
-    form input, form button { padding: 8px; margin: 5px; }
-    .hotel-list { margin-top: 20px; }
-    .hotel-item {
-      background: white; padding: 12px; margin-bottom: 10px;
-      border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .hotel-item span { font-weight: bold; }
-    .hotel-item form { display: inline; }
-    .delete-btn { background: crimson; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 5px; }
-    .delete-btn:hover { background: darkred; }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body class="admin-bg">
 
@@ -26,13 +13,16 @@
 
   <div class="admin-container">
 
+    <!-- Header -->
     <header class="admin-header">
       <h1>👑 Admin Dashboard</h1>
-      <p>Welcome, <strong><%= admin.username %></strong></p>
-      <a href="/admin/logout" class="logout-btn">Logout</a>
+      <p style="color:rgba(255,255,255,.65);font-size:15px;margin-bottom:14px">
+        Welcome, <strong style="color:var(--orange-light)"><%= admin.username %></strong>
+      </p>
+      <a href="/admin/logout" class="logout-btn">🚪 Logout</a>
     </header>
 
-    <!-- NAV -->
+    <!-- Nav -->
     <div class="admin-nav">
       <a href="/admin/users">👥 Users</a>
       <a href="/admin/blogs">📝 Blogs</a>
@@ -40,15 +30,15 @@
       <a href="/admin/trending-list">🔥 Trending</a>
     </div>
 
-    <!-- HOTELS -->
+    <!-- Hotels -->
     <section class="admin-section">
       <h2>🏨 Manage Hotels</h2>
 
       <form action="/admin/hotels" method="POST" class="admin-form">
         <input type="text" name="name" placeholder="Hotel Name" required>
         <input type="text" name="location" placeholder="Location" required>
-        <input type="number" name="price" placeholder="Price" required>
-        <button type="submit">Add Hotel</button>
+        <input type="number" name="price" placeholder="Price (₹)" required>
+        <button type="submit">+ Add Hotel</button>
       </form>
 
       <div class="admin-grid">
@@ -57,32 +47,28 @@
             <h3><%= h.name %></h3>
             <p>📍 <%= h.location %></p>
             <p>💰 ₹<%= h.price %></p>
-
-            <form action="/admin/hotels/delete/<%= h._id %>" method="POST">
-              <button class="danger-btn">Delete</button>
+            <form action="/admin/hotels/delete/<%= h._id %>" method="POST" style="margin-top:auto">
+              <button class="danger-btn">🗑 Delete</button>
             </form>
           </div>
         <% }) %>
       </div>
     </section>
 
-    <!-- TRENDING -->
+    <!-- Trending Places -->
     <section class="admin-section">
       <h2>🔥 Trending Places</h2>
 
-      <a href="/admin/add-trending" class="primary-btn">
-        ➕ Add Trending Place
-      </a>
+      <a href="/admin/add-trending" class="primary-btn">➕ Add Trending Place</a>
 
       <div class="admin-grid">
         <% trending.forEach(p => { %>
           <div class="admin-card">
-            <img src="/uploads/<%= p.images[0] %>" alt="">
+            <img src="/uploads/<%= p.images[0] %>" alt="<%= p.name %>">
             <h3><%= p.name %></h3>
             <p>📍 <%= p.location %></p>
-
-            <form action="/admin/delete-trending/<%= p._id %>" method="POST">
-              <button class="danger-btn">Delete</button>
+            <form action="/admin/delete-trending/<%= p._id %>" method="POST" style="margin-top:auto">
+              <button class="danger-btn">🗑 Delete</button>
             </form>
           </div>
         <% }) %>
@@ -90,6 +76,6 @@
     </section>
 
   </div>
-</body>
 
+</body>
 </html>

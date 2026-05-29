@@ -3,48 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tranding-Place-List_Admin</title>
+  <title>Admin – Trending Places – WanderWay</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-  <h2>Trending Places</h2>
+<body class="admin-bg">
 
-<a href="/admin/dashboard">
-    <button>⬅ Back to Dashboard</button>
-</a>
+  <div class="admin-overlay"></div>
 
-<table border="1">
-  <tr>
-    <th>Image</th>
-    <th>Name</th>
-    <th>Location</th>
-    <th>Hotel</th>
-    <th>Actions</th>
-  </tr>
+  <div class="admin-container">
 
-  <% places.forEach(p => { %>
-  <tr>
+    <div class="admin-header">
+      <h1>🔥 Trending Places</h1>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+        <a href="/admin/add-trending" class="primary-btn">➕ Add New Place</a>
+        <a href="/admin/dashboard" class="logout-btn" style="background:linear-gradient(135deg,var(--orange-dark),var(--orange))">← Dashboard</a>
+      </div>
+    </div>
 
-    <td>
-      <% if (p.images && p.images.length > 0) { %>
-        <img src="/uploads/<%= p.images[0] %>" width="120">
-      <% } else { %>
-        No Image
-      <% } %>
-    </td>
+    <div class="admin-grid">
+      <% places.forEach(p => { %>
+        <div class="admin-card">
+          <% if (p.images && p.images.length > 0) { %>
+            <img src="/uploads/<%= p.images[0] %>" alt="<%= p.name %>">
+          <% } else { %>
+            <div style="width:100%;height:150px;background:rgba(255,255,255,.1);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:rgba(255,255,255,.4);font-size:32px">🏔️</div>
+          <% } %>
+          <h3><%= p.name %></h3>
+          <p>📍 <%= p.location %></p>
+          <p style="font-size:12px;color:rgba(255,255,255,.45)">🏨 <%= p.nearbyHotel %></p>
+          <form action="/admin/delete-trending/<%= p._id %>" method="POST" style="margin-top:auto">
+            <button type="submit" class="danger-btn">🗑 Delete</button>
+          </form>
+        </div>
+      <% }) %>
+    </div>
 
-    <td><%= p.name %></td>
-    <td><%= p.location %></td>
-    <td><%= p.nearbyHotel %></td>
-
-    <td>
-      <form action="/admin/delete-trending/<%= p._id %>" method="POST">
-        <button type="submit">Delete</button>
-      </form>
-    </td>
-
-  </tr>
-  <% }) %>
-</table>
+  </div>
 
 </body>
 </html>

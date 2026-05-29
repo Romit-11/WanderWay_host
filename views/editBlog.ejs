@@ -2,18 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Edit Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Blog – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-  <div class="form-container">
-    <h2>Edit Blog</h2>
-    <form action="/blog/edit/<%= blog._id %>" method="POST">
-      <input type="text" name="title" value="<%= blog.title %>" required />
-      <textarea name="content" rows="5" required><%= blog.content %></textarea>
-      <button type="submit">Update</button>
-    </form>
-    <a href="/blog">← Back to Blogs</a>
+<body class="blog-bg">
+
+  <%- include("partials/navbar") %>
+
+  <div class="page-header">
+    <span class="section-label" style="color:var(--orange-light)">Edit Post</span>
+    <h2>Edit Your Story</h2>
   </div>
+
+  <div class="form-container" style="margin:0 auto 80px">
+    <h3>✏️ Update Blog Post</h3>
+    <form action="/blog/edit/<%= blog._id %>" method="POST">
+      <input type="text" name="title" value="<%= blog.title %>" required>
+      <textarea name="content" rows="6" required><%= blog.content %></textarea>
+      <button type="submit">💾 Update Story</button>
+    </form>
+    <div style="text-align:center;margin-top:20px">
+      <a href="/blog" style="color:var(--orange);font-weight:600;font-size:14px">← Back to Blogs</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <strong>WanderWay</strong>
+    <p>© 2025 WanderWay. All Rights Reserved.</p>
+  </footer>
+
 </body>
 </html>

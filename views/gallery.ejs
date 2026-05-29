@@ -1,74 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <title>ZappIt - Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body class="gallery-bg">
 
   <%- include("partials/navbar") %>
 
-    <div class="container">
-      <h2 class="page-title">Travel Memories Gallery</h2>
+  <!-- Page Header -->
+  <div class="page-header">
+    <span class="section-label" style="color:var(--orange-light)">Community Photos</span>
+    <h2>Travel Memories Gallery</h2>
+    <p>Stunning moments captured by our community of travellers worldwide</p>
+  </div>
 
-      <% if (user) { %>
-        <!-- Upload multiple images + location -->
+  <div class="container">
+
+    <!-- Upload form -->
+    <% if (user) { %>
+      <div style="text-align:center;margin-bottom:32px">
         <form class="upload-form" action="/gallery/upload" method="POST" enctype="multipart/form-data">
-          <input type="text" name="location" placeholder="Location (e.g. Shimla, India)" required>
+          <input type="text" name="location" placeholder="📍 Location (e.g. Shimla, India)" required>
           <input type="file" name="images" accept="image/*" multiple required>
-          <button type="submit" class="btn">Upload</button>
+          <button type="submit" class="btn">📤 Upload</button>
         </form>
-        <% } else { %>
-          <p class="login-prompt">
-            <a href="/login">Login</a> to upload images.
-          </p>
-          <% } %>
+      </div>
+    <% } else { %>
+      <p class="login-prompt" style="margin-bottom:28px">
+        <a href="/login">Login</a> to upload your travel memories.
+      </p>
+    <% } %>
 
-            <!-- Gallery Cards -->
-            <div class="gallery-grid">
-
-              <% if (galleries && galleries.length> 0) { %>
-
-                <% galleries.forEach(g=> { %>
-                  <div class="gallery-item">
-
-                    <a href="/gallery/<%= g._id %>">
-                      <img src="/uploads/<%= g.images[0] %>" alt="Gallery cover">
-
-                      <p class="location">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <%= g.location %>
-                      </p>
-                    </a>
-
-                    <!-- DELETE BUTTON (only uploader) -->
-                    <% if (user && user.username===g.uploadedBy) { %>
-                      <form action="/gallery/delete/<%= g._id %>" method="POST">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                      </form>
-                      <% } %>
-
-                  </div>
-
-                  <% }) %>
-
-                    <% } else { %>
-                      <p class="empty-msg">
-                        No images yet. Be the first to share your travel story!
-                      </p>
-                      <% } %>
-
-            </div>
+    <!-- Gallery Grid -->
+    <div class="gallery-grid">
+      <% if (galleries && galleries.length > 0) { %>
+        <% galleries.forEach(g => { %>
+          <div class="gallery-item sizzle-card">
+            <a href="/gallery/<%= g._id %>">
+              <img src="/uploads/<%= g.images[0] %>" alt="Gallery cover">
+            </a>
+            <p class="location">
+              <i class="fa-solid fa-location-dot"></i>
+              <%= g.location %>
+            </p>
+            <% if (user && user.username === g.uploadedBy) { %>
+              <div style="padding:0 12px 12px">
+                <form action="/gallery/delete/<%= g._id %>" method="POST">
+                  <button type="submit" class="btn-danger">🗑 Delete</button>
+                </form>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="empty-msg" style="grid-column:1/-1">No images yet. Be the first to share your travel story!</p>
+      <% } %>
     </div>
 
-    <footer class="footer">
-      <p>© 2025 ZappIt. All Rights Reserved.</p>
-    </footer>
+  </div>
+
+  <footer class="footer">
+    <strong>WanderWay</strong>
+    <p>© 2025 WanderWay. All Rights Reserved.</p>
+  </footer>
 
 </body>
-
 </html>

@@ -2,161 +2,163 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ZappIt - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WanderWay – Your Ultimate Travel Companion</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+
   <%- include("partials/navbar") %>
 
-
+  <!-- ── HERO ── -->
   <section class="hero hero-bg">
-    <h1>Welcome to ZappIt</h1>
-    <p>Your ultimate travel companion.</p>
-    <a href="#trending" class="explore-btn">Explore Now</a>
+    <div class="hero-eyebrow">Discover the World</div>
+    <h1>Your Ultimate<br><em>Travel Companion</em></h1>
+    <p>Explore breathtaking destinations, share your memories, and find perfect stays — all in one vibrant place.</p>
+    <div class="hero-actions">
+      <a href="#trending" class="explore-btn">Explore Now</a>
+      <a href="/gallery" class="btn btn-outline-orange" style="padding:15px 34px;font-size:15px">View Gallery</a>
+    </div>
+    <div class="hero-scroll">Scroll</div>
   </section>
 
+  <!-- ── COUNTERS ── -->
+  <section class="counter-bg reveal">
+    <div style="text-align:center;margin-bottom:44px;position:relative;z-index:1">
+      <span class="section-label">Our Impact</span>
+      <h2 class="section-title on-dark">Trusted by Travellers Worldwide</h2>
+      <div class="spice-divider"></div>
+    </div>
+    <div class="counter-section">
+      <div class="counter-box">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <h2 class="counter" data-target="120">0</h2>
+        <p>Destinations</p>
+      </div>
+      <div class="counter-box">
+        <i class="fa-solid fa-image"></i>
+        <h2 class="counter" data-target="850">0</h2>
+        <p>Travel Memories</p>
+      </div>
+      <div class="counter-box">
+        <i class="fa-solid fa-hotel"></i>
+        <h2 class="counter" data-target="300">0</h2>
+        <p>Hotels Listed</p>
+      </div>
+      <div class="counter-box">
+        <i class="fa-solid fa-face-smile"></i>
+        <h2 class="counter" data-target="1500">0</h2>
+        <p>Happy Travellers</p>
+      </div>
+    </div>
+  </section>
 
-  <!-- <section class="counter-section counter-bg reveal">
-  <div class="counter-box">
-    <i class="fa-solid fa-map-location-dot"></i>
-    <h2 class="counter" data-target="120">0</h2>
-    <p>Destinations</p>
-  </div>
+  <!-- ── TRENDING ── -->
+  <section id="trending" class="trending-bg reveal">
+    <div style="text-align:center;margin-bottom:44px;position:relative;z-index:1">
+      <span class="section-label">Trending Now</span>
+      <h2 class="section-title on-dark">🌍 Trending Places</h2>
+      <div class="spice-divider"></div>
+      <p class="section-sub on-dark">Hand-picked destinations loved by our community of explorers.</p>
+    </div>
 
-  <div class="counter-box">
-    <i class="fa-solid fa-image"></i>
-    <h2 class="counter" data-target="850">0</h2>
-    <p>Travel Memories</p>
-  </div>
-
-  <div class="counter-box">
-    <i class="fa-solid fa-hotel"></i>
-    <h2 class="counter" data-target="300">0</h2>
-    <p>Hotels Listed</p>
-  </div>
-
-  <div class="counter-box">
-    <i class="fa-solid fa-face-smile"></i>
-    <h2 class="counter" data-target="1500">0</h2>
-    <p>Happy Travelers</p>
-  </div>
-</section> -->
-
-
-
-<section id="trending" class="home-section trending-bg reveal">
-  <h2 class="section-title">🌍 Trending Places</h2>
-
-  <div class="trending-container">
-    <% trending.forEach(t => { %>
-      <div class="trend-card">
-        <a href="/place/<%= t._id %>">
-          <img src="/uploads/<%= t.images[0] %>" alt="<%= t.name %>">
-          <div class="trend-overlay">
+    <div class="trending-container">
+      <% trending.forEach(t => { %>
+        <a href="/place/<%= t._id %>" class="trend-card" style="text-decoration:none;color:inherit">
+          <div class="trend-card-img">
+            <img src="/uploads/<%= t.images[0] %>" alt="<%= t.name %>">
+            <div class="trend-overlay">
+              <h3><%= t.name %></h3>
+              <p><%= t.location %></p>
+            </div>
+          </div>
+          <div class="trend-card-body">
             <h3><%= t.name %></h3>
-            <p><%= t.location %></p>
+            <p><i class="fa-solid fa-location-dot" style="color:var(--red)"></i> <%= t.location %></p>
+            <div class="trend-rating">★★★★★ <span style="color:var(--text-faint);font-weight:400">&nbsp;Top Rated</span></div>
           </div>
         </a>
-      </div>
-    <% }) %>
-  </div>
-</section>
-
-
-<section class="home-section news-bg reveal">
-<h2 class="page-title">📰 Travel & Hotel News</h2>
-
-<% if (travelNews && travelNews.length > 0) { %>
-  <div class="news-container">
-    <% travelNews.forEach(news => { %>
-      <div class="news-card">
-        <% if (news.image) { %>
-          <img src="<%= news.image %>" alt="news image">
-        <% } %>
-
-        <h3><%= news.title %></h3>
-        <p><%= news.description %></p>
-
-        <a href="<%= news.url %>" target="_blank">
-          Read More →
-        </a>
-      </div>
-    <% }) %>
-  </div>
-<% } else { %>
-  <p>No travel news available.</p>
-<% } %>
-</section>
-
- <section class="section">
-    <h2>Why Choose ZappIt?</h2>
-    <p>We make your travel easy and memorable. From beautiful destinations to luxurious hotels, ZappIt is your one-stop travel partner.</p>
+      <% }) %>
+    </div>
   </section>
 
+  <!-- ── NEWS ── -->
+  <section class="news-bg reveal" style="background-color:#1c1917">
+    <div style="text-align:center;margin-bottom:44px;position:relative;z-index:1">
+      <span class="section-label" style="color:var(--orange-light)">Latest Stories</span>
+      <h2 class="section-title on-dark">📰 Travel &amp; Hotel News</h2>
+      <div class="spice-divider"></div>
+      <p class="section-sub on-dark">Fresh stories and tips to fuel your next adventure.</p>
+    </div>
 
+    <% if (travelNews && travelNews.length > 0) { %>
+      <div class="news-container">
+        <% travelNews.forEach(news => { %>
+          <div class="news-card">
+            <% if (news.image) { %>
+              <div class="news-card-img">
+                <img src="<%= news.image %>" alt="news">
+                <span class="news-tag">Travel</span>
+              </div>
+            <% } %>
+            <div class="news-card-body">
+              <h3><%= news.title %></h3>
+              <p><%= news.description %></p>
+              <a href="<%= news.url %>" target="_blank">Read More</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p class="empty-msg" style="color:rgba(255,255,255,.6)">No travel news available right now.</p>
+    <% } %>
+  </section>
 
+  <!-- ── WHY WanderWay ── -->
+  <section class="section reveal" style="max-width:900px;margin:60px auto">
+    <h2>Why Choose WanderWay? ✈️</h2>
+    <p>We make your travel easy and memorable. From beautiful destinations to luxurious hotels, WanderWay is your one-stop travel partner.</p>
+  </section>
+
+  <!-- ── FOOTER ── -->
   <footer class="footer">
-    <p>© 2025 ZappIt. All Rights Reserved.</p>
+    <strong>WanderWay</strong>
+    <p>© 2025 WanderWay. All Rights Reserved.</p>
   </footer>
 
   <script>
+  // Counter animation
   const counters = document.querySelectorAll('.counter');
   let counterStarted = false;
-
   function startCounters() {
     if (counterStarted) return;
     counterStarted = true;
-
     counters.forEach(counter => {
       const target = +counter.getAttribute('data-target');
       let count = 0;
-
-      const increment = target / 200;
-
-      const updateCounter = () => {
+      const increment = target / 180;
+      const update = () => {
         count += increment;
-        if (count < target) {
-          counter.innerText = Math.ceil(count);
-          requestAnimationFrame(updateCounter);
-        } else {
-          counter.innerText = target;
-        }
+        if (count < target) { counter.innerText = Math.ceil(count); requestAnimationFrame(update); }
+        else { counter.innerText = target.toLocaleString(); }
       };
-
-      updateCounter();
+      update();
     });
   }
-
-  // Start animation when section is visible
-  window.addEventListener('scroll', () => {
-    const section = document.querySelector('.counter-section');
-    const sectionTop = section.getBoundingClientRect().top;
-    const screenHeight = window.innerHeight;
-
-    if (sectionTop < screenHeight - 100) {
-      startCounters();
-    }
-  });
-</script>
-
-<script>
-  const reveals = document.querySelectorAll(".reveal");
-
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
   const revealOnScroll = () => {
     reveals.forEach(el => {
-      const top = el.getBoundingClientRect().top;
-      const windowHeight = window.innerHeight;
-
-      if (top < windowHeight - 100) {
-        el.classList.add("active");
-      }
+      if (el.getBoundingClientRect().top < window.innerHeight - 100)
+        el.classList.add('active');
     });
+    const cs = document.querySelector('.counter-section');
+    if (cs && cs.getBoundingClientRect().top < window.innerHeight - 100) startCounters();
   };
-
-  window.addEventListener("scroll", revealOnScroll);
+  window.addEventListener('scroll', revealOnScroll);
   revealOnScroll();
-</script>
-
+  </script>
 
 </body>
 </html>

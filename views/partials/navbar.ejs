@@ -1,16 +1,48 @@
 <nav class="navbar">
-  <div class="nav-left">ZappIt</div>
-  <div class="nav-right">
+  <div class="nav-left">WanderWay</div>
+
+  <!-- Desktop nav -->
+  <div class="nav-right" id="navRight">
     <a href="/">Home</a>
     <a href="/gallery">Gallery</a>
     <a href="/blog">Blog</a>
     <a href="/hotels">Hotels</a>
-
     <% if (user) { %>
-      <span style="margin-left:15px; color:#ffd700;">Hi, <%= user.username %></span>
+      <span style="margin-left:10px;color:var(--orange-light);font-weight:600;font-size:14px">Hi, <%= user.username %></span>
       <a href="/logout">Logout</a>
     <% } else { %>
       <a href="/login">Login</a>
     <% } %>
   </div>
+
+  <!-- Hamburger -->
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile drawer -->
+<div class="nav-drawer" id="navDrawer">
+  <a href="/">Home</a>
+  <a href="/gallery">Gallery</a>
+  <a href="/blog">Blog</a>
+  <a href="/hotels">Hotels</a>
+  <% if (user) { %>
+    <a href="/logout">Logout (<%= user.username %>)</a>
+  <% } else { %>
+    <a href="/login">Login</a>
+  <% } %>
+</div>
+
+<script>
+(function(){
+  var btn = document.getElementById('navToggle');
+  var drawer = document.getElementById('navDrawer');
+  if(btn && drawer){
+    btn.addEventListener('click', function(){
+      btn.classList.toggle('open');
+      drawer.classList.toggle('open');
+    });
+  }
+})();
+</script>

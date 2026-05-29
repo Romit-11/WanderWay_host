@@ -1,34 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Users – WanderWay</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-    <h2>All Users</h2>
+<body class="admin-bg">
 
-<table>
-  <tr>
-    <th>Username</th>
-    <th>Email</th>
-    <th>Actions</th>
-  </tr>
+  <div class="admin-overlay"></div>
 
-  <% users.forEach(u => { %>
-    <tr>
-      <td><%= u.username %></td>
-      <td><%= u.email %></td>
-      <td>
-        <form action="/admin/delete-user/<%= u._id %>" method="POST">
-          <button onclick="return confirm('Delete user and all data?')">
-            Delete
-          </button>
-        </form>
-      </td>
-    </tr>
-  <% }) %>
-</table>
+  <div class="admin-container">
+
+    <div class="admin-header">
+      <h1>👥 All Users</h1>
+      <a href="/admin/dashboard" class="logout-btn" style="background:linear-gradient(135deg,var(--orange-dark),var(--orange))">← Dashboard</a>
+    </div>
+
+    <div class="admin-grid">
+      <% users.forEach(u => { %>
+        <div class="admin-card">
+          <div style="font-size:48px;margin-bottom:12px">👤</div>
+          <h3><%= u.username %></h3>
+          <p style="font-size:13px;word-break:break-all"><%= u.email %></p>
+          <form action="/admin/delete-user/<%= u._id %>" method="POST" style="margin-top:auto">
+            <button class="danger-btn" onclick="return confirm('Delete user and all their data?')">🗑 Delete User</button>
+          </form>
+        </div>
+      <% }) %>
+    </div>
+
+  </div>
 
 </body>
 </html>

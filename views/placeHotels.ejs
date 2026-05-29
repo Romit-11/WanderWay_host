@@ -1,33 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Hotels near <%= place.name %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotels near <%= place.name %> – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
+<body class="hotels-bg">
 
-<%- include("partials/navbar") %>
+  <%- include("partials/navbar") %>
 
-<h2>🏨 Hotels near <%= place.name %></h2>
+  <!-- Page Header -->
+  <div class="page-header">
+    <span class="section-label" style="color:var(--orange-light)">Nearby Stays</span>
+    <h2>🏨 Hotels near <%= place.name %></h2>
+    <p>Find the perfect stay close to your destination</p>
+  </div>
 
-<% if (adminHotels.length > 0) { %>
-  <% adminHotels.forEach(hotel => { %>
-    <div class="hotel-card">
-      <h3><%= hotel.name %></h3>
-      <p>📍 <%= hotel.location %></p>
-      <p>💰 ₹ <%= hotel.price %></p>
+  <div class="container">
 
-      <!-- Booking.com redirect -->
-      <a 
-        href="https://www.booking.com/searchresults.html?ss=<%= encodeURIComponent(place.location) %>" 
-        target="_blank">
-        <button class="book-btn">Book Now</button>
-      </a>
+    <% if (adminHotels && adminHotels.length > 0) { %>
+      <% adminHotels.forEach(hotel => { %>
+        <div class="hotel-card">
+          <h3><%= hotel.name %></h3>
+          <p><i class="fa-solid fa-location-dot" style="color:var(--red)"></i> <%= hotel.location %></p>
+          <p style="font-size:15px;font-weight:600;color:var(--orange-dark)">💰 ₹ <%= hotel.price %> <span style="font-size:12px;color:var(--text-muted);font-weight:400">/ night</span></p>
+          <a href="https://www.booking.com/searchresults.html?ss=<%= encodeURIComponent(place.location) %>" target="_blank">
+            <button class="book-btn">🏨 Book Now →</button>
+          </a>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="empty-msg" style="color:rgba(255,255,255,.7);text-align:center;padding:60px 0">No hotels listed for this location yet.</p>
+    <% } %>
+
+    <div style="text-align:center;margin-top:40px">
+      <a href="/place/<%= place._id %>" class="back-btn">Back to <%= place.name %></a>
     </div>
-  <% }) %>
-<% } else { %>
-  <p>No admin-listed hotels found for this location.</p>
-<% } %>
+
+  </div>
+
+  <footer class="footer">
+    <strong>WanderWay</strong>
+    <p>© 2025 WanderWay. All Rights Reserved.</p>
+  </footer>
 
 </body>
 </html>
