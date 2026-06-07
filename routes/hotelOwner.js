@@ -437,7 +437,7 @@ router.post("/cancel-booking/:id", async (req, res) => {
         const refund = await razorpay.payments.refund(booking.paymentId, {
           amount: booking.totalAmount * 100,   // full refund in paise
           speed:  "normal",
-          notes:  { reason: "User cancelled booking via Zappit" }
+          notes:  { reason: "User cancelled booking via WanderWay" }
         });
 
         refundId = refund.id;

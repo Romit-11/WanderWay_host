@@ -13,7 +13,7 @@ cloudinary.config({
 const galleryStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder:         "zappit/gallery",
+    folder:         "WanderWay/gallery",
     allowed_formats:["jpg","jpeg","png","webp", "avif"],
     transformation: [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
   }
@@ -23,7 +23,7 @@ const galleryStorage = new CloudinaryStorage({
 const hotelStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder:         "zappit/hotels",
+    folder:         "WanderWay/hotels",
     allowed_formats:["jpg","jpeg","png","webp","avif"],
     transformation: [{ width: 1400, height: 1000, crop: "limit", quality: "auto" }]
   }
@@ -33,7 +33,7 @@ const hotelStorage = new CloudinaryStorage({
 const trendingStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder:         "zappit/trending",
+    folder:         "WanderWay/trending",
     allowed_formats:["jpg","jpeg","png","webp","avif"],
     transformation: [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
   }

@@ -14,7 +14,7 @@ async function sendBookingConfirmation(booking, hotelEmail) {
 
   const guestHtml = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;border:1px solid #eee;border-radius:12px">
-      <h2 style="color:#f97316;font-family:Georgia,serif">🎉 Booking Confirmed – Zappit</h2>
+      <h2 style="color:#f97316;font-family:Georgia,serif">🎉 Booking Confirmed – WanderWay</h2>
       <p>Hi <strong>${booking.userName}</strong>, your booking is confirmed!</p>
       <table style="width:100%;border-collapse:collapse;margin:20px 0">
         <tr><td style="padding:10px;background:#fff7ed;font-weight:700">Hotel</td><td style="padding:10px">${booking.hotelName}</td></tr>
@@ -27,8 +27,8 @@ async function sendBookingConfirmation(booking, hotelEmail) {
         <tr><td style="padding:10px;font-weight:700">Total Paid</td><td style="padding:10px;color:#f97316;font-weight:700;font-size:18px">₹${booking.totalAmount.toLocaleString()}</td></tr>
         <tr><td style="padding:10px;background:#fff7ed;font-weight:700">Payment ID</td><td style="padding:10px;font-size:12px">${booking.paymentId}</td></tr>
       </table>
-      <p style="color:#555;font-size:14px">Thank you for booking with Zappit. Have a wonderful stay!</p>
-      <p style="color:#f97316;font-weight:700">– Team Zappit ✈️</p>
+      <p style="color:#555;font-size:14px">Thank you for booking with WanderWay. Have a wonderful stay!</p>
+      <p style="color:#f97316;font-weight:700">– Team WanderWay ✈️</p>
     </div>`;
 
   const ownerHtml = `
@@ -46,23 +46,23 @@ async function sendBookingConfirmation(booking, hotelEmail) {
         <tr><td style="padding:10px;font-weight:700">Revenue</td><td style="padding:10px;color:#f97316;font-weight:700;font-size:18px">₹${booking.totalAmount.toLocaleString()}</td></tr>
         <tr><td style="padding:10px;background:#fff7ed;font-weight:700">Payment ID</td><td style="padding:10px;font-size:12px">${booking.paymentId}</td></tr>
       </table>
-      <p style="color:#f97316;font-weight:700">– Zappit Partner Notifications</p>
+      <p style="color:#f97316;font-weight:700">– WanderWay Partner Notifications</p>
     </div>`;
 
   const tasks = [];
   if (booking.userEmail) {
     tasks.push(transporter.sendMail({
-      from:    `"Zappit Travel" <${process.env.EMAIL_USER}>`,
+      from:    `"WanderWay Travel" <${process.env.EMAIL_USER}>`,
       to:      booking.userEmail,
-      subject: `✅ Booking Confirmed – ${booking.hotelName} | Zappit`,
+      subject: `✅ Booking Confirmed – ${booking.hotelName} | WanderWay`,
       html:    guestHtml
     }));
   }
   if (hotelEmail) {
     tasks.push(transporter.sendMail({
-      from:    `"Zappit Travel" <${process.env.EMAIL_USER}>`,
+      from:    `"WanderWay Travel" <${process.env.EMAIL_USER}>`,
       to:      hotelEmail,
-      subject: `🏨 New Booking Received – ${booking.hotelName} | Zappit`,
+      subject: `🏨 New Booking Received – ${booking.hotelName} | WanderWay`,
       html:    ownerHtml
     }));
   }
@@ -83,7 +83,7 @@ async function sendCancellationEmail(booking) {
 
   const html = `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;border:1px solid #eee;border-radius:12px">
-      <h2 style="color:#dc2626;font-family:Georgia,serif">❌ Booking Cancelled – Zappit</h2>
+      <h2 style="color:#dc2626;font-family:Georgia,serif">❌ Booking Cancelled – WanderWay</h2>
       <p>Hi <strong>${booking.userName}</strong>, your booking has been cancelled.</p>
       <table style="width:100%;border-collapse:collapse;margin:20px 0">
         <tr><td style="padding:10px;background:#fff7ed;font-weight:700">Hotel</td><td style="padding:10px">${booking.hotelName}</td></tr>
@@ -97,15 +97,15 @@ async function sendCancellationEmail(booking) {
         <p style="color:#16a34a;font-weight:700;margin-bottom:4px">💸 Refund Initiated</p>
         <p style="font-size:13px;color:#15803d">Your refund of <strong>₹${booking.totalAmount.toLocaleString()}</strong> has been initiated and will reflect in your account within 5-7 business days depending on your bank.</p>
       </div>
-      <p style="color:#f97316;font-weight:700;margin-top:20px">– Team Zappit ✈️</p>
+      <p style="color:#f97316;font-weight:700;margin-top:20px">– Team WanderWay ✈️</p>
     </div>`;
 
   if (!booking.userEmail) return;
   try {
     await transporter.sendMail({
-      from:    `"Zappit Travel" <${process.env.EMAIL_USER}>`,
+      from:    `"WanderWay Travel" <${process.env.EMAIL_USER}>`,
       to:      booking.userEmail,
-      subject: `❌ Booking Cancelled & Refund Initiated – ${booking.hotelName} | Zappit`,
+      subject: `❌ Booking Cancelled & Refund Initiated – ${booking.hotelName} | WanderWay`,
       html
     });
   } catch (err) {
