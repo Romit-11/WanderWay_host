@@ -2,16 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hotels – WanderWay</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hotels – Zappit</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;align-items:stretch}
+    .hcard{background:rgba(255,255,255,.98);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border-soft);display:flex;flex-direction:column;height:100%;transition:var(--tr);text-decoration:none;color:inherit}
+    .hcard:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg);border-color:var(--border)}
+    .hcard-img{height:190px;overflow:hidden;flex-shrink:0;position:relative}
+    .hcard-img img{width:100%;height:190px;object-fit:cover;transition:transform .5s ease}
+    .hcard:hover .hcard-img img{transform:scale(1.07)}
+    .hcard-img-placeholder{width:100%;height:190px;background:linear-gradient(135deg,#1c1917,#292524);display:flex;align-items:center;justify-content:center;font-size:48px}
+    .hcard-body{padding:20px 22px 22px;flex:1;display:flex;flex-direction:column}
+    .hcard-body h3{font-family:var(--fd);font-size:20px;color:var(--text-dark);margin-bottom:6px}
+    .hcard-stars{color:var(--orange);font-size:14px;margin-bottom:8px}
+    .hcard-meta{font-size:13px;color:var(--text-muted);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+    .hcard-price{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--orange-dark);margin-top:auto;padding-top:12px}
+    .hcard-price span{font-size:13px;font-weight:400;color:var(--text-muted)}
+    .amenity-tag{display:inline-block;padding:3px 9px;background:var(--orange-pale);color:var(--orange-dark);border-radius:var(--r-pill);font-size:11px;font-weight:600;margin:2px}
+  </style>
 </head>
 <body class="hotels-bg">
-
   <%- include("partials/navbar") %>
 
-  <!-- Page Header -->
   <div class="page-header">
     <span class="section-label" style="color:var(--orange-light)">Accommodations</span>
     <h2>Hotels &amp; Stays</h2>
@@ -19,28 +33,50 @@
   </div>
 
   <div class="container">
-
-    <% if (localHotels && localHotels.length > 0) { %>
-      <% localHotels.forEach(hotel => { %>
-        <div class="hotel-card">
-          <h3><%= hotel.name %></h3>
-          <p><i class="fa-solid fa-location-dot" style="color:var(--red)"></i> <%= hotel.location %></p>
-          <p style="font-size:15px;font-weight:600;color:var(--orange-dark)">💰 ₹ <%= hotel.price %> <span style="font-size:12px;color:var(--text-muted);font-weight:400">/ night</span></p>
-          <a href="https://www.booking.com/searchresults.html?ss=<%= encodeURIComponent(hotel.location) %>" target="_blank">
-            <button class="book-btn">🏨 Book Hotel →</button>
+    <% if(localHotels && localHotels.length > 0){ %>
+      <div class="hotel-grid">
+        <% localHotels.forEach(hotel=>{ %>
+          <a href="/hotel-owner/hotel/<%= hotel._id %>" class="hcard">
+            <div class="hcard-img">
+              <% if(hotel.images && hotel.images.length>0){ %>
+                <img src="<%= hotel.images[0] %>" alt="<%= hotel.name %>">
+              <% } else { %>
+                <div class="hcard-img-placeholder">🏨</div>
+              <% } %>
+            </div>
+            <div class="hcard-body">
+              <h3><%= hotel.name %></h3>
+              <div class="hcard-stars"><%= '★'.repeat(hotel.starRating||3) %><%= '☆'.repeat(5-(hotel.starRating||3)) %></div>
+              <p class="hcard-meta"><i class="fa-solid fa-location-dot" style="color:var(--red)"></i> <%= hotel.location %></p>
+              <% if(hotel.amenities && hotel.amenities.length>0){ %>
+                <div style="margin-bottom:8px">
+                  <% hotel.amenities.slice(0,3).forEach(a=>{ %>
+                    <span class="amenity-tag"><%= a %></span>
+                  <% }) %>
+                  <% if(hotel.amenities.length>3){ %><span class="amenity-tag">+<%= hotel.amenities.length-3 %> more</span><% } %>
+                </div>
+              <% } %>
+              <div class="hcard-price">
+                ₹<%= (() => {
+                  const p = hotel.price || (hotel.roomTypes && hotel.roomTypes.length > 0 ? hotel.roomTypes[0].price : 0);
+                  return p && p > 0 ? p.toLocaleString() : 'N/A';
+                })() %>
+                <span>/ night</span>
+              </div>
+            </div>
           </a>
-        </div>
-      <% }) %>
+        <% }) %>
+      </div>
     <% } else { %>
-      <p class="empty-msg" style="color:rgba(255,255,255,.7);text-align:center;padding:60px 0">No hotels available yet.</p>
+      <div style="text-align:center;padding:80px 20px">
+        <div style="font-size:64px;margin-bottom:16px">🏨</div>
+        <h3 style="font-family:var(--fd);font-size:24px;color:rgba(255,255,255,.9);margin-bottom:8px">No hotels listed yet</h3>
+        <p style="color:rgba(255,255,255,.6);margin-bottom:24px">Hotel owners can register and list their properties.</p>
+        <a href="/hotel-owner/register" class="btn btn-orange" style="animation:none">🏨 List Your Hotel</a>
+      </div>
     <% } %>
-
   </div>
 
-  <footer class="footer">
-    <strong>WanderWay</strong>
-    <p>© 2025 WanderWay. All Rights Reserved.</p>
-  </footer>
-
+  <footer class="footer"><strong>Zappit</strong><p>© 2025 Zappit. All Rights Reserved.</p></footer>
 </body>
 </html>

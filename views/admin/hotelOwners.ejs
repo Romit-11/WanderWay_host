@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hotel Owners – Zappit Admin</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .owner-card{background:rgba(255,255,255,.10);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);border-radius:var(--r-lg);padding:22px 26px;margin-bottom:20px;transition:var(--tr)}
+    .owner-card:hover{background:rgba(255,255,255,.15);transform:translateX(4px)}
+    .owner-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+    .owner-header h3{font-family:var(--fd);font-size:20px;color:#fff;margin-bottom:3px}
+    .owner-meta{font-size:13px;color:rgba(255,255,255,.6);display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px}
+    .owner-meta span{display:flex;align-items:center;gap:5px}
+    .hotel-mini-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
+    .hotel-mini{background:rgba(255,255,255,.08);border-radius:var(--r-md);padding:12px 14px;border:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .hotel-mini-info{flex:1;min-width:120px}
+    .hotel-mini-info h4{color:#fff;font-size:14px;font-weight:600;margin-bottom:3px}
+    .hotel-mini-info p{color:rgba(255,255,255,.55);font-size:12px}
+    .expand-btn{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.18);border-radius:var(--r-pill);padding:6px 14px;font-family:var(--fb);font-size:12px;font-weight:600;cursor:pointer;transition:var(--tr)}
+    .expand-btn:hover{background:rgba(255,255,255,.22)}
+    .hotels-section{display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1)}
+    .hotels-section.open{display:block}
+  </style>
+</head>
+<body class="admin-bg">
+  <div class="admin-overlay"></div>
+  <div class="admin-container">
+
+    <div class="admin-header">
+      <h1>🏨 Hotel Owners</h1>
+      <p style="color:rgba(255,255,255,.6);margin-bottom:14px">Manage all registered hotel owners and their listings</p>
+      <a href="/admin/dashboard" class="logout-btn" style="background:linear-gradient(135deg,var(--orange-dark),var(--orange))">← Dashboard</a>
+    </div>
+
+    <% if(owners.length === 0){ %>
+      <div style="text-align:center;padding:60px 0">
+        <div style="font-size:52px;margin-bottom:14px">🏨</div>
+        <p style="color:rgba(255,255,255,.6);font-size:16px">No hotel owners registered yet.</p>
+      </div>
+    <% } else { %>
+
+      <p style="color:rgba(255,255,255,.55);font-size:14px;margin-bottom:20px">
+        <i class="fa-solid fa-users"></i> &nbsp;<%= owners.length %> registered hotel owner<%= owners.length>1?'s':'' %>
+      </p>
+
+      <% owners.forEach((owner, idx) => { %>
+        <div class="owner-card">
+
+          <div class="owner-header">
+            <div>
+              <h3>🏢 <%= owner.businessName %></h3>
+              <p style="font-size:13px;color:rgba(255,255,255,.55)">Owner: <%= owner.name %></p>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <button class="expand-btn" onclick="toggleHotels(<%= idx %>)" id="expandBtn<%= idx %>">
+                🏨 View Hotels (<%= owner.hotelCount %>)
+              </button>
+              <form action="/admin/delete-hotel-owner/<%= owner._id %>" method="POST" style="display:inline"
+                    onsubmit="return confirm('Delete <%= owner.businessName %> and ALL their hotels? This cannot be undone.')">
+                <button type="submit" class="danger-btn" style="margin-top:0">🗑 Delete Owner</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="owner-meta">
+            <span><i class="fa-solid fa-envelope"></i> <%= owner.email %></span>
+            <span><i class="fa-solid fa-phone"></i> <%= owner.phone %></span>
+            <span><i class="fa-solid fa-hotel"></i> <%= owner.hotelCount %> hotel<%= owner.hotelCount!==1?'s':'' %></span>
+            <span><i class="fa-solid fa-calendar"></i> Joined <%= new Date(owner.createdAt).toDateString() %></span>
+          </div>
+
+          <!-- Hotels belonging to this owner (lazy loaded via toggle) -->
+          <div class="hotels-section" id="hotelsSection<%= idx %>">
+            <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.45);margin-bottom:10px">Hotels by this owner</p>
+            <!-- Hotels fetched inline via EJS — we need them passed from route -->
+            <% if(owner.hotels && owner.hotels.length > 0){ %>
+              <div class="hotel-mini-grid">
+                <% owner.hotels.forEach(h=>{ %>
+                  <div class="hotel-mini">
+                    <div class="hotel-mini-info">
+                      <h4><%= h.name %></h4>
+                      <p>📍 <%= h.location %></p>
+                      <p>⭐ <%= h.starRating %> Star &nbsp;·&nbsp; From ₹<%= (h.price||0).toLocaleString() %></p>
+                    </div>
+                    <form action="/admin/delete-owner-hotel/<%= h._id %>" method="POST"
+                          onsubmit="return confirm('Delete hotel <%= h.name %>?')">
+                      <button type="submit" class="danger-btn" style="margin-top:0;padding:6px 12px;font-size:11px">🗑 Delete</button>
+                    </form>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <p style="color:rgba(255,255,255,.45);font-size:13px">This owner has no hotels listed yet.</p>
+            <% } %>
+          </div>
+
+        </div>
+      <% }) %>
+    <% } %>
+
+  </div>
+
+  <script>
+  function toggleHotels(idx){
+    const section = document.getElementById("hotelsSection" + idx);
+    const btn     = document.getElementById("expandBtn" + idx);
+    const isOpen  = section.classList.contains("open");
+    section.classList.toggle("open");
+    btn.textContent = isOpen ? `🏨 View Hotels` : `🔼 Hide Hotels`;
+  }
+  </script>
+</body>
+</html>

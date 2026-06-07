@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Owner Dashboard – Zappit</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="admin-bg">
+  <div class="admin-overlay"></div>
+  <div class="admin-container">
+
+    <!-- Header -->
+    <header class="admin-header">
+      <h1>🏨 Hotel Owner Dashboard</h1>
+      <p style="color:rgba(255,255,255,.65);margin-bottom:14px">
+        Welcome, <strong style="color:var(--orange-light)"><%= owner.name %></strong>
+        &nbsp;·&nbsp; <span style="color:rgba(255,255,255,.5);font-size:13px"><%= owner.businessName %></span>
+      </p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <a href="/hotel-owner/add-hotel" class="primary-btn">➕ Add New Hotel</a>
+        <a href="/hotel-owner/bookings" class="primary-btn" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)">📋 All Bookings</a>
+        <a href="/hotel-owner/logout" class="logout-btn">🚪 Logout</a>
+      </div>
+    </header>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;margin-bottom:44px">
+      <div class="counter-box" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.14)">
+        <i class="fa-solid fa-hotel" style="color:var(--orange-light)"></i>
+        <h2 style="color:var(--orange-light)"><%= hotels.length %></h2>
+        <p style="color:rgba(255,255,255,.6)">Your Hotels</p>
+      </div>
+      <div class="counter-box" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.14)">
+        <i class="fa-solid fa-calendar-check" style="color:var(--orange-light)"></i>
+        <h2 style="color:var(--orange-light)"><%= bookings.filter(b=>b.status==='confirmed').length %></h2>
+        <p style="color:rgba(255,255,255,.6)">Confirmed</p>
+      </div>
+      <div class="counter-box" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.14)">
+        <i class="fa-solid fa-indian-rupee-sign" style="color:var(--orange-light)"></i>
+        <h2 style="color:var(--orange-light)">₹<%= totalRevenue.toLocaleString() %></h2>
+        <p style="color:rgba(255,255,255,.6)">Revenue</p>
+      </div>
+      <div class="counter-box" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.14)">
+        <i class="fa-solid fa-clock" style="color:var(--orange-light)"></i>
+        <h2 style="color:var(--orange-light)"><%= bookings.filter(b=>b.status==='pending').length %></h2>
+        <p style="color:rgba(255,255,255,.6)">Pending</p>
+      </div>
+    </div>
+
+    <!-- My Hotels -->
+    <section class="admin-section">
+      <h2>🏨 My Hotels</h2>
+      <% if(hotels.length===0){ %>
+        <p style="color:rgba(255,255,255,.6);text-align:center;padding:40px 0">
+          No hotels added yet. <a href="/hotel-owner/add-hotel" style="color:var(--orange-light);font-weight:700">Add your first hotel →</a>
+        </p>
+      <% } else { %>
+        <div class="admin-grid">
+          <% hotels.forEach(h=>{ %>
+            <div class="admin-card">
+              <% if(h.images && h.images.length>0){ %>
+                <img src="<%= h.images[0] %>" alt="<%= h.name %>">
+              <% } else { %>
+                <div style="width:100%;height:150px;background:rgba(255,255,255,.1);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:36px">🏨</div>
+              <% } %>
+              <h3><%= h.name %></h3>
+              <p>📍 <%= h.location %></p>
+              <p>⭐ <%= h.starRating %> Star &nbsp;·&nbsp; From ₹<%= h.price %></p>
+              <p style="font-size:12px;color:rgba(255,255,255,.45);margin-top:4px"><%= h.roomTypes.length %> room type(s)</p>
+              <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+                <a href="/hotel-owner/hotel/<%= h._id %>" class="primary-btn" style="padding:7px 14px;font-size:12px;margin-bottom:0">👁 View</a>
+                <a href="/hotel-owner/edit-hotel/<%= h._id %>" class="primary-btn" style="padding:7px 14px;font-size:12px;margin-bottom:0;background:linear-gradient(135deg,#0ea5e9,#0284c7)">✏️ Edit</a>
+                <form action="/hotel-owner/delete-hotel/<%= h._id %>" method="POST" style="display:inline" onsubmit="return confirm('Delete this hotel?')">
+                  <button class="danger-btn" style="margin-top:0;padding:7px 14px;font-size:12px">🗑 Delete</button>
+                </form>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </section>
+
+    <!-- Recent Bookings -->
+    <section class="admin-section">
+      <h2>📋 Recent Bookings</h2>
+      <% if(bookings.length===0){ %>
+        <p style="color:rgba(255,255,255,.6);text-align:center;padding:24px 0">No bookings yet.</p>
+      <% } else { %>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:14px">
+            <thead>
+              <tr style="border-bottom:1px solid rgba(249,115,22,.3)">
+                <th style="text-align:left;padding:10px 14px;color:var(--orange-light);font-size:12px;text-transform:uppercase;letter-spacing:1px">Guest</th>
+                <th style="text-align:left;padding:10px 14px;color:var(--orange-light);font-size:12px;text-transform:uppercase;letter-spacing:1px">Hotel</th>
+                <th style="text-align:left;padding:10px 14px;color:var(--orange-light);font-size:12px;text-transform:uppercase;letter-spacing:1px">Room</th>
+                <th style="text-align:left;padding:10px 14px;color:var(--orange-light);font-size:12px;text-transform:uppercase;letter-spacing:1px">Dates</th>
+                <th style="text-align:left;padding:10px 14px;color:var(--orange-light);font-size:12px;text-transform:uppercase;letter-spacing:1px">Amount</th>
+                <th style="text-align:left;padding:10px 14px;color:var(--orange-light);font-size:12px;text-transform:uppercase;letter-spacing:1px">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% bookings.forEach(b=>{ %>
+                <tr style="border-bottom:1px solid rgba(255,255,255,.06);transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='transparent'">
+                  <td style="padding:10px 14px;color:#fff"><%= b.userName %><br><span style="font-size:12px;color:rgba(255,255,255,.5)"><%= b.userEmail %></span></td>
+                  <td style="padding:10px 14px;color:rgba(255,255,255,.8)"><%= b.hotelName %></td>
+                  <td style="padding:10px 14px;color:rgba(255,255,255,.8)"><%= b.roomType %><br><span style="font-size:12px;color:rgba(255,255,255,.5)"><%= b.nights %>N · <%= b.rooms %>R</span></td>
+                  <td style="padding:10px 14px;color:rgba(255,255,255,.8);font-size:12px"><%= new Date(b.checkIn).toDateString() %><br>→ <%= new Date(b.checkOut).toDateString() %></td>
+                  <td style="padding:10px 14px;color:var(--orange-light);font-weight:700">₹<%= b.totalAmount.toLocaleString() %></td>
+                  <td style="padding:10px 14px">
+                    <span style="padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;
+                      background:<%= b.status==='confirmed'?'rgba(22,163,74,.3)':b.status==='cancelled'?'rgba(220,38,38,.3)':'rgba(249,115,22,.3)' %>;
+                      color:<%= b.status==='confirmed'?'#86efac':b.status==='cancelled'?'#fca5a5':'#fdba74' %>">
+                      <%= b.status.toUpperCase() %>
+                    </span>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </section>
+
+  </div>
+</body>
+</html>

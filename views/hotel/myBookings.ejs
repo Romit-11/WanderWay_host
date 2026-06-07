@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>My Bookings – Zappit</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .bk-wrap { max-width:900px; margin:0 auto; padding:40px 24px 80px }
+
+    /* Section headers */
+    .bk-section-title {
+      font-family:var(--fd); font-size:18px; font-weight:700;
+      color:var(--text-dark); margin:32px 0 16px;
+      padding-bottom:10px; border-bottom:2px solid var(--orange-pale);
+      display:flex; align-items:center; gap:8px;
+    }
+    .bk-section-title:first-child { margin-top:0 }
+
+    /* Card */
+    .bk-card {
+      background:#fff; border-radius:var(--r-lg);
+      margin-bottom:18px; box-shadow:var(--shadow-sm);
+      border:1px solid var(--border-soft);
+      overflow:hidden; transition:var(--tr);
+      display:flex; flex-direction:row;
+    }
+    .bk-card:hover { box-shadow:var(--shadow-md); transform:translateY(-3px) }
+    .bk-card.cancelled { opacity:.8 }
+
+    /* Left colour stripe */
+    .bk-stripe { width:6px; flex-shrink:0 }
+    .confirmed .bk-stripe  { background:var(--green) }
+    .pending   .bk-stripe  { background:var(--orange) }
+    .cancelled .bk-stripe  { background:var(--red) }
+
+    /* Card body */
+    .bk-body { padding:20px 24px; flex:1; min-width:0 }
+
+    /* Header row */
+    .bk-head { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:14px }
+    .bk-head h3 { font-family:var(--fd); font-size:19px; color:var(--text-dark); margin-bottom:3px }
+    .bk-head p  { font-size:13px; color:var(--text-muted) }
+
+    /* Status badge */
+    .status-badge {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:5px 14px; border-radius:var(--r-pill);
+      font-size:12px; font-weight:700; text-transform:uppercase;
+      white-space:nowrap; flex-shrink:0;
+    }
+    .badge-confirmed { background:rgba(22,163,74,.12);  color:var(--green) }
+    .badge-pending   { background:rgba(249,115,22,.12); color:var(--orange-dark) }
+    .badge-cancelled { background:rgba(220,38,38,.1);   color:var(--red) }
+
+    /* Meta grid */
+    .bk-meta {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+      gap:12px 16px;
+      margin-bottom:14px;
+    }
+    .bk-meta-item label {
+      font-size:10px; font-weight:700; text-transform:uppercase;
+      letter-spacing:.6px; color:var(--text-faint); display:block; margin-bottom:3px;
+    }
+    .bk-meta-item span { color:var(--text-dark); font-weight:600; font-size:14px }
+    .bk-amount { font-family:var(--fd); font-size:20px; font-weight:800 }
+    .amount-paid      { color:var(--orange-dark) }
+    .amount-refunded  { color:var(--red) }
+    .amount-unpaid    { color:var(--text-muted) }
+
+    /* Refund notice */
+    .refund-notice {
+      background:#f0fdf4; border:1px solid #86efac;
+      border-radius:var(--r-md); padding:12px 16px;
+      font-size:13px; color:#15803d;
+      display:flex; align-items:flex-start; gap:8px; margin-top:10px;
+    }
+    .refund-notice i { margin-top:2px; flex-shrink:0 }
+
+    /* Cancel button */
+    .cancel-btn {
+      display:inline-flex; align-items:center; gap:6px;
+      margin-top:12px; padding:9px 20px;
+      background:linear-gradient(135deg,var(--red-dark),var(--red));
+      color:#fff; border:none; border-radius:var(--r-pill);
+      font-family:var(--fb); font-size:13px; font-weight:700;
+      cursor:pointer; transition:var(--tr);
+    }
+    .cancel-btn:hover { transform:translateY(-2px); box-shadow:0 5px 14px rgba(220,38,38,.35) }
+
+    /* Empty state */
+    .empty-state { text-align:center; padding:60px 20px }
+    .empty-state .icon { font-size:64px; margin-bottom:16px }
+
+    @media(max-width:540px) {
+      .bk-body { padding:16px 18px }
+      .bk-head h3 { font-size:17px }
+      .bk-meta { grid-template-columns:1fr 1fr }
+    }
+  </style>
+</head>
+<body style="background:var(--cream)">
+  <%- include("../partials/navbar") %>
+
+  <!-- Page header -->
+  <div style="background:linear-gradient(135deg,#1c1917,#292524);padding:52px 24px 36px;text-align:center">
+    <span class="section-label" style="color:var(--orange-light)">Your Travel</span>
+    <h2 style="font-family:var(--fd);font-size:clamp(28px,4vw,44px);font-weight:800;color:#fff;margin-bottom:8px">My Bookings</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:15px">All your past and upcoming hotel stays</p>
+  </div>
+
+  <div class="bk-wrap">
+
+    <% if(!bookings || bookings.length === 0){ %>
+      <div class="empty-state">
+        <div class="icon">🏨</div>
+        <h3 style="font-family:var(--fd);font-size:24px;color:var(--text-dark);margin-bottom:8px">No bookings yet</h3>
+        <p style="color:var(--text-muted);margin-bottom:24px">Start exploring destinations and book your first stay!</p>
+        <a href="/" class="btn btn-orange" style="animation:none">🌍 Explore Places</a>
+      </div>
+
+    <% } else {
+
+      const today    = new Date();
+      // Upcoming = not yet checked OUT (so user can cancel even if check-in was today)
+      const upcoming = bookings.filter(b => b.status !== 'cancelled' && new Date(b.checkOut) >= today);
+      const past     = bookings.filter(b => b.status !== 'cancelled' && new Date(b.checkOut) < today);
+      const cancelled= bookings.filter(b => b.status === 'cancelled');
+
+    %>
+
+    <!-- ── UPCOMING ── -->
+    <% if(upcoming.length > 0){ %>
+      <div class="bk-section-title">📅 Upcoming Stays <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(<%= upcoming.length %>)</span></div>
+      <% upcoming.forEach(function(b){ %>
+        <div class="bk-card confirmed">
+          <div class="bk-stripe"></div>
+          <div class="bk-body">
+            <div class="bk-head">
+              <div>
+                <h3><%= b.hotelName %></h3>
+                <p>📍 <%= b.hotelCity %> &nbsp;·&nbsp; 🛏 <%= b.roomType %></p>
+              </div>
+              <span class="status-badge badge-<%= b.status %>">
+                <% if(b.status==='confirmed'){ %><i class="fa-solid fa-circle-check"></i> Confirmed
+                <% } else { %><i class="fa-solid fa-clock"></i> Pending<% } %>
+              </span>
+            </div>
+            <div class="bk-meta">
+              <div class="bk-meta-item"><label>Check-in</label><span><%= new Date(b.checkIn).toDateString() %></span></div>
+              <div class="bk-meta-item"><label>Check-out</label><span><%= new Date(b.checkOut).toDateString() %></span></div>
+              <div class="bk-meta-item"><label>Nights</label><span><%= b.nights %></span></div>
+              <div class="bk-meta-item"><label>Rooms</label><span><%= b.rooms %></span></div>
+              <div class="bk-meta-item"><label>Guests</label><span><%= b.guests %></span></div>
+              <div class="bk-meta-item">
+                <label>Amount (Paid)</label>
+                <span class="bk-amount amount-paid">₹<%= b.totalAmount.toLocaleString() %></span>
+              </div>
+            </div>
+            <% if(b.status === 'confirmed'){ %>  <!-- show cancel for all confirmed bookings -->
+              <form action="/hotel-owner/cancel-booking/<%= b._id %>" method="POST"
+                    onsubmit="return confirm('Cancel this booking?\n\n₹<%= b.totalAmount.toLocaleString() %> will be refunded to your account within 5–7 business days.')">
+                <button type="submit" class="cancel-btn">
+                  <i class="fa-solid fa-xmark"></i> Cancel Booking & Get Refund
+                </button>
+              </form>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <!-- ── PAST ── -->
+    <% if(past.length > 0){ %>
+      <div class="bk-section-title">✅ Past Stays <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(<%= past.length %>)</span></div>
+      <% past.forEach(function(b){ %>
+        <div class="bk-card confirmed">
+          <div class="bk-stripe"></div>
+          <div class="bk-body">
+            <div class="bk-head">
+              <div>
+                <h3><%= b.hotelName %></h3>
+                <p>📍 <%= b.hotelCity %> &nbsp;·&nbsp; 🛏 <%= b.roomType %></p>
+              </div>
+              <span class="status-badge badge-confirmed"><i class="fa-solid fa-circle-check"></i> Completed</span>
+            </div>
+            <div class="bk-meta">
+              <div class="bk-meta-item"><label>Check-in</label><span><%= new Date(b.checkIn).toDateString() %></span></div>
+              <div class="bk-meta-item"><label>Check-out</label><span><%= new Date(b.checkOut).toDateString() %></span></div>
+              <div class="bk-meta-item"><label>Nights</label><span><%= b.nights %></span></div>
+              <div class="bk-meta-item"><label>Rooms</label><span><%= b.rooms %></span></div>
+              <div class="bk-meta-item"><label>Guests</label><span><%= b.guests %></span></div>
+              <div class="bk-meta-item">
+                <label>Amount (Paid)</label>
+                <span class="bk-amount amount-paid">₹<%= b.totalAmount.toLocaleString() %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <!-- ── CANCELLED ── -->
+    <% if(cancelled.length > 0){ %>
+      <div class="bk-section-title" style="border-bottom-color:var(--border-soft)">❌ Cancelled <span style="font-size:14px;font-weight:400;color:var(--text-muted)">(<%= cancelled.length %>)</span></div>
+      <% cancelled.forEach(function(b){ %>
+        <div class="bk-card cancelled">
+          <div class="bk-stripe"></div>
+          <div class="bk-body">
+            <div class="bk-head">
+              <div>
+                <h3><%= b.hotelName %></h3>
+                <p>📍 <%= b.hotelCity %> &nbsp;·&nbsp; 🛏 <%= b.roomType %></p>
+              </div>
+              <span class="status-badge badge-cancelled"><i class="fa-solid fa-circle-xmark"></i> Cancelled</span>
+            </div>
+            <div class="bk-meta">
+              <div class="bk-meta-item"><label>Check-in</label><span><%= new Date(b.checkIn).toDateString() %></span></div>
+              <div class="bk-meta-item"><label>Check-out</label><span><%= new Date(b.checkOut).toDateString() %></span></div>
+              <div class="bk-meta-item"><label>Nights</label><span><%= b.nights %></span></div>
+              <div class="bk-meta-item"><label>Rooms</label><span><%= b.rooms %></span></div>
+              <div class="bk-meta-item">
+                <label>Amount <%= b.paid ? '(Refunded)' : '(Unpaid)' %></label>
+                <span class="bk-amount amount-refunded">₹<%= b.totalAmount.toLocaleString() %></span>
+              </div>
+              <div class="bk-meta-item"><label>Cancelled On</label><span><%= new Date(b.createdAt).toDateString() %></span></div>
+            </div>
+            <% if(b.paid){ %>
+              <div class="refund-notice">
+                <i class="fa-solid fa-circle-check"></i>
+                <div>
+                  <strong>Refund Initiated</strong> — ₹<%= b.totalAmount.toLocaleString() %> will be credited to your account within 5–7 business days.
+                  <% if(b.refundId){ %><br><span style="font-size:11px;opacity:.75">Refund ID: <%= b.refundId %></span><% } %>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <% } %>
+  </div>
+
+  <footer class="footer"><strong>Zappit</strong><p>© 2025 Zappit. All Rights Reserved.</p></footer>
+</body>
+</html>

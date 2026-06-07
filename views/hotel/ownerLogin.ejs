@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hotel Owner Login – Zappit</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="user-login-bg">
+
+  <%- include("../partials/navbar") %>
+
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 20px">
+    <div class="auth-container login-animate">
+
+      <h2>🏨 Hotel Owner Login</h2>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px">Manage your properties and bookings</p>
+
+      <% if(error){ %>
+        <p class="error"><%= error %></p>
+      <% } %>
+
+      <form method="POST" action="/hotel-owner/login">
+        <div><label>Email Address</label><input type="email" name="email" placeholder="owner@hotel.com" required></div>
+        <div><label>Password</label><input type="password" name="password" placeholder="••••••••" required></div>
+        <button type="submit">Login →</button>
+      </form>
+
+      <p style="margin-top:16px">New hotel partner? <a href="/hotel-owner/register">Register here</a></p>
+
+      <hr style="border:none;border-top:1px solid var(--border-soft);margin:18px 0">
+
+      <p style="font-size:13px;text-align:center;color:var(--text-muted)">
+        Are you a traveller? <a href="/login" style="color:var(--text-muted);font-weight:600">Login as Traveller</a>
+      </p>
+
+    </div>
+  </div>
+
+</body>
+</html>

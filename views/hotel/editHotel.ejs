@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Edit Hotel – Zappit</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .hotel-form{max-width:820px;margin:0 auto 80px;padding:0 20px}
+    .form-section{background:rgba(255,255,255,.97);border-radius:var(--r-lg);padding:32px 36px;margin-bottom:24px;border-top:4px solid var(--orange);box-shadow:var(--shadow-md)}
+    .form-section h3{font-family:var(--fd);font-size:22px;color:var(--text-dark);margin-bottom:22px;padding-bottom:10px;border-bottom:2px solid var(--orange-pale)}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px}
+    .form-group input,.form-group select,.form-group textarea{padding:12px 14px;font-family:var(--fb);font-size:14px;border:1.5px solid var(--border-soft);border-radius:var(--r-sm);background:var(--cream);color:var(--text-dark);outline:none;transition:var(--tr)}
+    .form-group textarea{min-height:100px;resize:vertical}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--orange);background:#fff;box-shadow:0 0 0 4px rgba(249,115,22,.08)}
+    .full{grid-column:1/-1}
+    .amenity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:8px}
+    .amenity-label{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--border-soft);border-radius:var(--r-sm);cursor:pointer;transition:var(--tr);font-size:13px;font-weight:500}
+    .amenity-label:has(input:checked){border-color:var(--orange);background:var(--orange-pale);color:var(--orange-dark)}
+    .submit-btn{width:100%;padding:16px;font-family:var(--fb);font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--orange),var(--orange-light));color:#fff;border:none;border-radius:var(--r-pill);cursor:pointer;box-shadow:var(--shadow-md);transition:var(--tr)}
+    .submit-btn:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+    @media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body class="admin-bg">
+  <div class="admin-overlay"></div>
+  <div style="position:relative;z-index:2;padding-top:20px">
+    <div class="page-header" style="padding:40px 24px 28px">
+      <span class="section-label" style="color:var(--orange-light)">Edit Listing</span>
+      <h2>✏️ Edit Hotel</h2>
+      <p>Update your hotel's information</p>
+    </div>
+
+    <form action="/hotel-owner/edit-hotel/<%= hotel._id %>" method="POST" enctype="multipart/form-data" class="hotel-form">
+
+      <div class="form-section">
+        <h3>📋 Basic Information</h3>
+        <div class="form-grid">
+          <div class="form-group full"><label>Hotel Name</label><input type="text" name="name" value="<%= hotel.name %>" required></div>
+          <div class="form-group"><label>Star Rating</label>
+            <select name="starRating">
+              <% [1,2,3,4,5].forEach(s=>{ %>
+                <option value="<%= s %>" <%= hotel.starRating===s?'selected':'' %>><%= '⭐'.repeat(s) %> <%= s %> Star</option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-group"><label>City</label><input type="text" name="city" value="<%= hotel.city %>" required></div>
+          <div class="form-group full"><label>Full Address</label><input type="text" name="address" value="<%= hotel.address %>" required></div>
+          <div class="form-group full"><label>Location (for search)</label><input type="text" name="location" value="<%= hotel.location %>" required></div>
+          <div class="form-group full"><label>Description</label><textarea name="description" required><%= hotel.description %></textarea></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>📞 Contact & Check-in</h3>
+        <div class="form-grid">
+          <div class="form-group"><label>Phone</label><input type="tel" name="phone" value="<%= hotel.phone||'' %>"></div>
+          <div class="form-group"><label>Hotel Email</label><input type="email" name="email" value="<%= hotel.email||'' %>"></div>
+          <div class="form-group"><label>Check-in Time</label><input type="time" name="checkInTime" value="<%= hotel.checkInTime %>"></div>
+          <div class="form-group"><label>Check-out Time</label><input type="time" name="checkOutTime" value="<%= hotel.checkOutTime %>"></div>
+          <div class="form-group full"><label>Policies</label><textarea name="policies"><%= hotel.policies||'' %></textarea></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>✨ Amenities</h3>
+        <div class="amenity-grid">
+          <% ["Free WiFi","Swimming Pool","Gym / Fitness","Restaurant","Bar / Lounge","Spa & Wellness","Free Parking","Airport Shuttle","Room Service","Laundry","Business Centre","Conference Room","Kids Play Area","Pet Friendly","24-hr Front Desk","Elevator","Non-Smoking Rooms","Air Conditioning"].forEach(a=>{ %>
+            <label class="amenity-label">
+              <input type="checkbox" name="amenities" value="<%= a %>" <%= (hotel.amenities||[]).includes(a)?'checked':'' %>> <%= a %>
+            </label>
+          <% }) %>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>📸 Add More Photos</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Current: <%= hotel.images.length %> photo(s). Upload more below.</p>
+        <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px">
+          <% hotel.images.forEach(img=>{ %>
+            <img src="<%= img %>" style="width:100px;height:70px;object-fit:cover;border-radius:var(--r-sm);flex-shrink:0">
+          <% }) %>
+        </div>
+        <input type="file" name="newImages" accept="image/*" multiple style="font-family:var(--fb);font-size:14px">
+      </div>
+
+      <button type="submit" class="submit-btn">💾 Save Changes</button>
+    </form>
+    <div style="text-align:center;margin:16px 0 60px">
+      <a href="/hotel-owner/dashboard" style="color:rgba(255,255,255,.7);font-size:14px">← Back to Dashboard</a>
+    </div>
+  </div>
+</body>
+</html>

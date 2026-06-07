@@ -1,0 +1,67 @@
+<div class="bk-card <%= b.status %>">
+  <div class="bk-header">
+    <div>
+      <h3><%= b.hotelName %></h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-top:3px">
+        📍 <%= b.hotelCity %> &nbsp;·&nbsp; 🛏 <%= b.roomType %>
+      </p>
+    </div>
+    <span class="status-badge badge-<%= b.status %>">
+      <% if(b.status==='confirmed'){ %><i class="fa-solid fa-circle-check"></i> Confirmed
+      <% } else if(b.status==='cancelled'){ %><i class="fa-solid fa-circle-xmark"></i> Cancelled
+      <% } else { %><i class="fa-solid fa-clock"></i> Pending<% } %>
+    </span>
+  </div>
+
+  <div class="bk-meta">
+    <div class="bk-meta-item">
+      <label>Check-in</label>
+      <span><%= new Date(b.checkIn).toDateString() %></span>
+    </div>
+    <div class="bk-meta-item">
+      <label>Check-out</label>
+      <span><%= new Date(b.checkOut).toDateString() %></span>
+    </div>
+    <div class="bk-meta-item">
+      <label>Duration</label>
+      <span><%= b.nights %> night<%= b.nights>1?'s':'' %></span>
+    </div>
+    <div class="bk-meta-item">
+      <label>Rooms · Guests</label>
+      <span><%= b.rooms %> room<%= b.rooms>1?'s':'' %> · <%= b.guests %> guest<%= b.guests>1?'s':'' %></span>
+    </div>
+    <div class="bk-meta-item">
+      <label>Amount <%= b.status==='cancelled'?'(Refunded)':b.paid?'(Paid)':'(Unpaid)' %></label>
+      <span class="total-amount" style="color:<%= b.status==='cancelled'?'var(--red)':b.paid?'var(--orange-dark)':'var(--text-muted)' %>">
+        ₹<%= b.totalAmount.toLocaleString() %>
+      </span>
+    </div>
+    <div class="bk-meta-item">
+      <label>Booked On</label>
+      <span><%= new Date(b.createdAt).toDateString() %></span>
+    </div>
+  </div>
+
+  <!-- Refund notice for cancelled paid bookings -->
+  <% if(b.status==='cancelled' && b.paid){ %>
+    <div class="refund-notice">
+      <i class="fa-solid fa-circle-check" style="margin-top:2px;flex-shrink:0"></i>
+      <div>
+        <strong>Refund Initiated</strong> — ₹<%= b.totalAmount.toLocaleString() %> will be credited to your account within 5–7 business days.
+        <% if(b.refundId){ %><br><span style="font-size:11px;opacity:.75">Refund ID: <%= b.refundId %></span><% } %>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Cancel button -->
+  <% if(showCancel){ %>
+    <div style="margin-top:14px">
+      <form action="/hotel-owner/cancel-booking/<%= b._id %>" method="POST"
+            onsubmit="return confirm('Cancel this booking? ₹<%= b.totalAmount.toLocaleString() %> will be refunded to your account within 5–7 business days.')">
+        <button type="submit" class="cancel-form-btn">
+          <i class="fa-solid fa-xmark"></i> Cancel & Refund
+        </button>
+      </form>
+    </div>
+  <% } %>
+</div>

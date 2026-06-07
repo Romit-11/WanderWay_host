@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WanderWay – Your Ultimate Travel Companion</title>
+  <title>Zappit – Your Ultimate Travel Companion</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -67,7 +67,7 @@
       <% trending.forEach(t => { %>
         <a href="/place/<%= t._id %>" class="trend-card" style="text-decoration:none;color:inherit">
           <div class="trend-card-img">
-            <img src="/uploads/<%= t.images[0] %>" alt="<%= t.name %>">
+            <img src="<%= t.images[0] %>" alt="<%= t.name %>">
             <div class="trend-overlay">
               <h3><%= t.name %></h3>
               <p><%= t.location %></p>
@@ -115,16 +115,16 @@
     <% } %>
   </section>
 
-  <!-- ── WHY WanderWay ── -->
+  <!-- ── WHY ZAPPIT ── -->
   <section class="section reveal" style="max-width:900px;margin:60px auto">
-    <h2>Why Choose WanderWay? ✈️</h2>
-    <p>We make your travel easy and memorable. From beautiful destinations to luxurious hotels, WanderWay is your one-stop travel partner.</p>
+    <h2>Why Choose Zappit? ✈️</h2>
+    <p>We make your travel easy and memorable. From beautiful destinations to luxurious hotels, Zappit is your one-stop travel partner.</p>
   </section>
 
   <!-- ── FOOTER ── -->
   <footer class="footer">
-    <strong>WanderWay</strong>
-    <p>© 2025 WanderWay. All Rights Reserved.</p>
+    <strong>Zappit</strong>
+    <p>© 2025 Zappit. All Rights Reserved.</p>
   </footer>
 
   <script>

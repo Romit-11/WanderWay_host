@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hotel Owner Register – Zappit</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="user-login-bg">
+  <%- include("../partials/navbar") %>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 20px">
+    <div class="auth-container login-animate" style="max-width:520px">
+      <h2>🏨 Hotel Owner Sign Up</h2>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px">List your property on Zappit and start getting bookings</p>
+      <% if(error){ %><p class="error"><%= error %></p><% } %>
+      <form method="POST" action="/hotel-owner/register">
+        <div><label>Full Name</label><input type="text" name="name" placeholder="John Doe" required></div>
+        <div><label>Business / Hotel Brand Name</label><input type="text" name="businessName" placeholder="The Grand Palace Hotels" required></div>
+        <div><label>Email Address</label><input type="email" name="email" placeholder="owner@hotel.com" required></div>
+        <div><label>Phone Number</label><input type="tel" name="phone" placeholder="+91 9876543210" required></div>
+        <div><label>Password</label><input type="password" name="password" placeholder="Min 6 characters" required minlength="6"></div>
+        <button type="submit">Create Owner Account →</button>
+      </form>
+      <p>Already have an account? <a href="/hotel-owner/login">Login here</a></p>
+      <hr>
+      <p style="font-size:13px"><a href="/" style="color:var(--text-muted)">← Back to Zappit</a></p>
+    </div>
+  </div>
+</body>
+</html>

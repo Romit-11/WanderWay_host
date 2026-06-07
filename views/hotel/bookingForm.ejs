@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Book <%= hotel.name %> – Zappit</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    .booking-wrap { max-width:920px;margin:0 auto;padding:40px 24px 80px;display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start }
+    .booking-card { background:#fff;border-radius:var(--r-lg);padding:32px 36px;box-shadow:var(--shadow-md);border:1px solid var(--border-soft);border-top:5px solid var(--orange) }
+    .booking-card h2 { font-family:var(--fd);font-size:26px;color:var(--text-dark);margin-bottom:22px }
+    .field-group { display:flex;flex-direction:column;gap:6px;margin-bottom:16px }
+    .field-group label { font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px }
+    .field-group input,.field-group select { padding:13px 14px;font-family:var(--fb);font-size:14px;border:1.5px solid var(--border-soft);border-radius:var(--r-sm);background:var(--cream);color:var(--text-dark);outline:none;transition:var(--tr) }
+    .field-group input:focus,.field-group select:focus { border-color:var(--orange);background:#fff;box-shadow:0 0 0 4px rgba(249,115,22,.08) }
+    .date-row { display:grid;grid-template-columns:1fr 1fr;gap:14px }
+    .summary-card { background:#fff;border-radius:var(--r-lg);padding:28px;box-shadow:var(--shadow-md);border:1px solid var(--border-soft);position:sticky;top:90px }
+    .summary-card h3 { font-family:var(--fd);font-size:20px;color:var(--text-dark);margin-bottom:18px;padding-bottom:8px;border-bottom:2px solid var(--orange-pale) }
+    .summary-row { display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border-soft);font-size:14px }
+    .summary-row:last-child { border-bottom:none }
+    .summary-row.total { font-size:18px;font-weight:800;color:var(--orange-dark);padding-top:14px }
+    .pay-btn { width:100%;padding:15px;font-family:var(--fb);font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--orange),var(--orange-light));color:#fff;border:none;border-radius:var(--r-pill);cursor:pointer;box-shadow:var(--shadow-md);transition:var(--tr);margin-top:18px;animation:pulse 2.8s infinite }
+    .pay-btn:hover { transform:translateY(-3px);box-shadow:var(--shadow-lg) }
+    @media(max-width:768px){ .booking-wrap { grid-template-columns:1fr } .summary-card { position:static } .date-row { grid-template-columns:1fr } }
+  </style>
+</head>
+<body style="background:var(--cream)">
+  <%- include("../partials/navbar") %>
+
+  <div class="page-header" style="background:linear-gradient(135deg,#1c1917,#292524);padding:48px 24px 36px">
+    <span class="section-label" style="color:var(--orange-light)">Booking</span>
+    <h2 style="color:#fff"><%= hotel.name %></h2>
+    <p>📍 <%= hotel.location %> &nbsp;·&nbsp; ⭐ <%= hotel.starRating %> Star</p>
+  </div>
+
+  <div class="booking-wrap">
+
+    <!-- BOOKING FORM -->
+    <div class="booking-card">
+      <h2>📋 Your Booking Details</h2>
+
+      <div class="field-group">
+        <label>Room Type</label>
+        <select id="roomSelect" onchange="updateRoom()">
+          <% hotel.roomTypes.forEach(r=>{ %>
+            <option value="<%= r.type %>" data-price="<%= r.price %>" data-guests="<%= r.maxGuests %>"
+              <%= (room && room.type.trim()===r.type.trim())?'selected':'' %>>
+              <%= r.type %> – ₹<%= r.price.toLocaleString() %>/night (Max <%= r.maxGuests %> guests)
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="date-row">
+        <div class="field-group">
+          <label>Check-in Date</label>
+          <input type="date" id="checkIn" min="<%= new Date().toISOString().split('T')[0] %>" required>
+        </div>
+        <div class="field-group">
+          <label>Check-out Date</label>
+          <input type="date" id="checkOut" required>
+        </div>
+      </div>
+
+      <div class="date-row">
+        <div class="field-group">
+          <label>Guests</label>
+          <input type="number" id="guests" value="2" min="1" max="<%= room ? room.maxGuests : 10 %>" onchange="updateSummary()">
+        </div>
+        <div class="field-group">
+          <label>Rooms <span id="roomsAvailLabel" style="color:var(--green);font-size:11px;font-weight:600"></span></label>
+          <input type="number" id="rooms" value="1" min="1" max="10" onchange="updateSummary()">
+        </div>
+      </div>
+
+      <h2 style="margin-top:24px">👤 Guest Information</h2>
+
+      <div class="field-group"><label>Full Name</label>
+        <input type="text" id="guestName" value="<%= user.username %>" required>
+      </div>
+      <div class="field-group"><label>Email</label>
+        <input type="email" id="guestEmail" value="<%= user.email || '' %>" required>
+      </div>
+      <div class="field-group"><label>Phone Number</label>
+        <input type="tel" id="guestPhone" placeholder="+91 9876543210" required>
+      </div>
+
+      <div style="background:var(--orange-pale);border-radius:var(--r-md);padding:14px 16px;margin-top:8px;font-size:13px;color:var(--orange-dark)">
+        <strong>🔒 Secure Payment</strong> — Your payment is processed securely through Razorpay. We never store card details.
+      </div>
+    </div>
+
+    <!-- SUMMARY SIDEBAR -->
+    <div class="summary-card">
+      <h3>🧾 Booking Summary</h3>
+
+      <% if(hotel.images && hotel.images.length>0){ %>
+        <img src="<%= hotel.images[0] %>" style="width:100%;height:140px;object-fit:cover;border-radius:var(--r-md);margin-bottom:14px">
+      <% } %>
+
+      <div class="summary-row"><span style="color:var(--text-muted)">Hotel</span><strong><%= hotel.name %></strong></div>
+      <div class="summary-row"><span style="color:var(--text-muted)">Room</span><strong id="summaryRoom"><%= room ? room.type : hotel.roomTypes[0]?.type %></strong></div>
+      <div class="summary-row"><span style="color:var(--text-muted)">Check-in</span><strong id="summaryIn">–</strong></div>
+      <div class="summary-row"><span style="color:var(--text-muted)">Check-out</span><strong id="summaryOut">–</strong></div>
+      <div class="summary-row"><span style="color:var(--text-muted)">Nights</span><strong id="summaryNights">–</strong></div>
+      <div class="summary-row"><span style="color:var(--text-muted)">Rooms</span><strong id="summaryRooms">1</strong></div>
+      <div class="summary-row"><span style="color:var(--text-muted)">Price/Night</span><strong id="summaryPriceNight">₹<%= room ? room.price.toLocaleString() : hotel.roomTypes[0]?.price %></strong></div>
+      <div class="summary-row total"><span>Total</span><strong id="summaryTotal" style="color:var(--orange-dark)">₹–</strong></div>
+
+      <button class="pay-btn" onclick="initiatePayment()">
+        <i class="fa-solid fa-lock"></i> Pay & Confirm Booking
+      </button>
+
+      <p style="font-size:12px;color:var(--text-faint);text-align:center;margin-top:12px">
+        Free cancellation up to 24hrs before check-in
+      </p>
+    </div>
+
+  </div>
+
+  <footer class="footer"><strong>Zappit</strong><p>© 2025 Zappit. All Rights Reserved.</p></footer>
+
+  <script>
+  const hotelId   = "<%= hotel._id %>";
+  const razorKey  = "<%= razorpayKey %>";
+  const userName  = "<%= user.username %>";
+  const userEmail = "<%= user.email || '' %>";
+
+  let currentPrice = <%= (room && room.price) ? room.price : (hotel.roomTypes && hotel.roomTypes[0] ? hotel.roomTypes[0].price : 0) %>;
+
+  // Set min dates
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("checkIn").value  = today;
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  document.getElementById("checkOut").value = tomorrow.toISOString().split("T")[0];
+  document.getElementById("checkOut").min   = tomorrow.toISOString().split("T")[0];
+
+  document.getElementById("checkIn").addEventListener("change", function(){
+    const next = new Date(this.value); next.setDate(next.getDate()+1);
+    document.getElementById("checkOut").min   = next.toISOString().split("T")[0];
+    document.getElementById("checkOut").value = next.toISOString().split("T")[0];
+    updateSummary();
+  });
+  document.getElementById("checkOut").addEventListener("change", updateSummary);
+
+  // updateRoom defined below with availability logic
+
+  function updateSummary(){
+    const ci = new Date(document.getElementById("checkIn").value);
+    const co = new Date(document.getElementById("checkOut").value);
+    if(isNaN(ci)||isNaN(co)||co<=ci) return;
+    const nights = Math.ceil((co-ci)/(1000*60*60*24));
+    const rooms  = parseInt(document.getElementById("rooms").value)||1;
+    const total  = currentPrice * nights * rooms;
+    document.getElementById("summaryIn").textContent    = ci.toDateString();
+    document.getElementById("summaryOut").textContent   = co.toDateString();
+    document.getElementById("summaryNights").textContent= nights;
+    document.getElementById("summaryRooms").textContent = rooms;
+    document.getElementById("summaryTotal").textContent = "₹" + total.toLocaleString("en-IN");
+  }
+  updateSummary();
+
+  // Update rooms max based on selected room type availability
+  const roomAvailability = {
+    <% hotel.roomTypes.forEach((r,i)=>{ %>
+      "<%= r.type.replace(/"/g,'&quot;') %>": <%= r.available %><%= i < hotel.roomTypes.length-1 ? ',' : '' %>
+    <% }) %>
+  };
+
+  function updateRoom(){
+    const sel = document.getElementById("roomSelect");
+    const opt = sel.options[sel.selectedIndex];
+    currentPrice = parseInt(opt.dataset.price);
+    const avail = roomAvailability[opt.value] || 0;
+    document.getElementById("rooms").max = avail;
+    if(parseInt(document.getElementById("rooms").value) > avail)
+      document.getElementById("rooms").value = Math.min(1, avail);
+    document.getElementById("roomsAvailLabel").textContent = avail > 0 ? `(${avail} available)` : "(Sold out)";
+    document.getElementById("summaryRoom").textContent = opt.value;
+    document.getElementById("summaryPriceNight").textContent = "₹" + parseInt(opt.dataset.price).toLocaleString("en-IN");
+    updateSummary();
+  }
+  // Init on load
+  (function(){ updateRoom(); })();
+
+  async function initiatePayment(){
+    const checkIn  = document.getElementById("checkIn").value;
+    const checkOut = document.getElementById("checkOut").value;
+    const guests   = document.getElementById("guests").value;
+    const rooms    = parseInt(document.getElementById("rooms").value);
+    const roomType = document.getElementById("roomSelect").value;
+    const phone    = document.getElementById("guestPhone").value;
+    const email    = document.getElementById("guestEmail").value;
+    const avail    = roomAvailability[roomType] || 0;
+
+    if(!checkIn || !checkOut || !phone || !email){
+      alert("Please fill in all fields including phone and email."); return;
+    }
+    if(rooms < 1){ alert("Please select at least 1 room."); return; }
+    if(rooms > avail){
+      alert(`Only ${avail} room(s) available for "${roomType}". Please reduce your selection.`); return;
+    }
+
+    const payBtn = document.querySelector(".pay-btn");
+    payBtn.disabled = true;
+    payBtn.textContent = "⏳ Processing...";
+
+    let bookingId = null;
+    try {
+      const res = await fetch("/hotel-owner/create-order", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ hotelId, roomType, checkIn, checkOut, guests, rooms, userEmail: email, userPhone: phone })
+      });
+      const data = await res.json();
+      if(!data.orderId){
+        alert(data.error || "Failed to create order. Please try again.");
+        payBtn.disabled = false; payBtn.textContent = "🔒 Pay & Confirm Booking";
+        return;
+      }
+      bookingId = data.bookingId;
+
+      const options = {
+        key:         razorKey,
+        amount:      data.amount,
+        currency:    "INR",
+        name:        "Zappit Travel",
+        description: `${roomType} – ${rooms} room(s)`,
+        order_id:    data.orderId,
+        prefill:     { name: userName, email: email, contact: phone },
+        theme:       { color: "#f97316" },
+        modal: {
+          ondismiss: async function() {
+            // User closed Razorpay without paying — mark booking as cancelled
+            if(bookingId){
+              await fetch("/hotel-owner/cancel-pending/" + bookingId, { method: "POST" });
+            }
+            payBtn.disabled = false;
+            payBtn.textContent = "🔒 Pay & Confirm Booking";
+          }
+        },
+        handler: async function(response){
+          payBtn.textContent = "⏳ Verifying payment...";
+          const vRes = await fetch("/hotel-owner/verify-payment", {
+            method:  "POST",
+            headers: { "Content-Type": "application/json" },
+            body:    JSON.stringify({
+              razorpay_order_id:   response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature:  response.razorpay_signature,
+              bookingId:           bookingId
+            })
+          });
+          const vData = await vRes.json();
+          if(vData.success){
+            window.location.href = "/hotel-owner/booking-confirmed/" + bookingId;
+          } else {
+            alert("Payment verification failed. Please contact support with Payment ID: " + response.razorpay_payment_id);
+            payBtn.disabled = false;
+            payBtn.textContent = "🔒 Pay & Confirm Booking";
+          }
+        }
+      };
+      const rzp = new Razorpay(options);
+      rzp.open();
+    } catch(err){
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+      payBtn.disabled = false;
+      payBtn.textContent = "🔒 Pay & Confirm Booking";
+    }
+  }
+  </script>
+</body>
+</html>

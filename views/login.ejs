@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login – WanderWay</title>
+  <title>Login – Zappit</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body class="user-login-bg">
 
   <%- include("partials/navbar") %>
 
-  <!-- Centre the card in the remaining viewport height -->
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px 20px">
     <div class="auth-container login-animate">
 
@@ -33,9 +32,16 @@
         <button type="submit">Login →</button>
       </form>
 
-      <p>Don't have an account? <a href="/register">Register here</a></p>
-      <hr>
-      <p class="admin-link">Are you an admin? <a href="/admin/login">Login as Admin</a></p>
+      <p style="margin-top:16px">Don't have an account? <a href="/register">Register here</a></p>
+
+      <hr style="border:none;border-top:1px solid var(--border-soft);margin:18px 0">
+
+      <p style="font-size:13px;text-align:center;color:var(--text-muted)">
+        Are you an admin? <a href="/admin/login" style="color:var(--text-muted);font-weight:600">Login as Admin</a>
+      </p>
+      <p style="font-size:13px;text-align:center;margin-top:8px;color:var(--text-muted)">
+        Are you a hotel owner? <a href="/hotel-owner/login" style="color:var(--text-muted);font-weight:600">Login as Hotel Owner</a>
+      </p>
 
     </div>
   </div>

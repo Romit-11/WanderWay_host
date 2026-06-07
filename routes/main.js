@@ -178,8 +178,12 @@ router.get("/place/:id/hotels", async (req, res) => {
     const city = place.location.split(",")[0].trim();
 
     const adminHotels = await Hotel.find({
-      location: { $regex: city, $options: "i" }
-    });
+      $or: [
+        { city:     { $regex: city, $options: "i" } },
+        { location: { $regex: city, $options: "i" } }
+      ],
+      active: true
+    }).populate("ownerId", "name businessName");
 
     res.render("placeHotels", {
       place,
@@ -202,7 +206,7 @@ router.get("/place/:id/hotels", async (req, res) => {
 
 // Login page
 router.get("/login", (req, res) =>
-  res.render("login", { error: null, user: req.session.user })
+  res.render("login", { error: null, ownerError: null, user: req.session.user })
 );
 
 // Register page
@@ -252,7 +256,11 @@ router.post("/login", async (req, res) => {
     if (!isMatch)
       return res.render("login", { error: "Invalid email or password", user: null });
 
-    req.session.user = user;
+    req.session.user = {
+      _id:      user._id.toString(),
+      username: user.username,
+      email:    user.email
+    };
     res.redirect("/");
 
   } catch (err) {
@@ -333,7 +341,7 @@ router.post("/blog/delete/:id", requireLogin, async (req, res) => {
 router.get("/hotels", async (req, res) => {
   try {
     // Admin-added hotels
-    const localHotels = await Hotel.find().sort({ createdAt: -1 });
+    const localHotels = await Hotel.find({ active: true }).sort({ createdAt: -1 });
 
     res.render("hotels", {
       user: req.session.user,

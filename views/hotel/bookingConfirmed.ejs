@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Booking Confirmed – Zappit</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .confirmed-wrap{max-width:680px;margin:60px auto 80px;padding:0 24px}
+    .confirmed-card{background:#fff;border-radius:var(--r-xl);padding:48px 44px;box-shadow:var(--shadow-xl);border-top:6px solid var(--green);text-align:center}
+    .tick{width:80px;height:80px;background:linear-gradient(135deg,var(--green),var(--green-light));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 20px;animation:scaleIn .6s var(--spring)}
+    .confirmed-card h1{font-family:var(--fd);font-size:32px;color:var(--text-dark);margin-bottom:8px}
+    .confirmed-card p.sub{font-size:15px;color:var(--text-muted);margin-bottom:32px}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border-soft);border-radius:var(--r-md);overflow:hidden;margin-bottom:28px;text-align:left}
+    .detail-cell{padding:14px 18px;border-bottom:1px solid var(--border-soft)}
+    .detail-cell:nth-child(odd){background:var(--cream);border-right:1px solid var(--border-soft)}
+    .detail-cell label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-faint);display:block;margin-bottom:3px}
+    .detail-cell span{font-size:14px;font-weight:600;color:var(--text-dark)}
+    .detail-cell.full{grid-column:1/-1;border-right:none}
+    .total-row{background:var(--orange-pale);border-bottom:none}
+    .total-row span{color:var(--orange-dark);font-size:18px;font-weight:800}
+    .action-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+    @media(max-width:500px){.detail-grid{grid-template-columns:1fr}.detail-cell:nth-child(odd){border-right:none}.detail-cell{border-right:none}.confirmed-card{padding:32px 22px}}
+  </style>
+</head>
+<body style="background:var(--cream)">
+  <%- include("../partials/navbar") %>
+
+  <div class="confirmed-wrap">
+    <div class="confirmed-card">
+      <div class="tick">✓</div>
+      <h1>Booking Confirmed! 🎉</h1>
+      <p class="sub">Your stay has been successfully booked. A confirmation has been sent to your email.</p>
+
+      <div class="detail-grid">
+        <div class="detail-cell full">
+          <label>Hotel</label>
+          <span><%= booking.hotelName %></span>
+        </div>
+        <div class="detail-cell">
+          <label>Guest Name</label>
+          <span><%= booking.userName %></span>
+        </div>
+        <div class="detail-cell">
+          <label>Room Type</label>
+          <span><%= booking.roomType %></span>
+        </div>
+        <div class="detail-cell">
+          <label>Check-in</label>
+          <span><%= new Date(booking.checkIn).toDateString() %></span>
+        </div>
+        <div class="detail-cell">
+          <label>Check-out</label>
+          <span><%= new Date(booking.checkOut).toDateString() %></span>
+        </div>
+        <div class="detail-cell">
+          <label>Nights</label>
+          <span><%= booking.nights %></span>
+        </div>
+        <div class="detail-cell">
+          <label>Rooms</label>
+          <span><%= booking.rooms %></span>
+        </div>
+        <div class="detail-cell">
+          <label>Guests</label>
+          <span><%= booking.guests %></span>
+        </div>
+        <div class="detail-cell">
+          <label>Payment ID</label>
+          <span style="font-size:12px;word-break:break-all"><%= booking.paymentId %></span>
+        </div>
+        <div class="detail-cell">
+          <label>Status</label>
+          <span style="color:var(--green)">✓ CONFIRMED</span>
+        </div>
+        <div class="detail-cell full total-row">
+          <label>Total Paid</label>
+          <span>₹<%= booking.totalAmount.toLocaleString() %></span>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <a href="/hotel-owner/my-bookings" class="btn btn-orange" style="animation:none">📋 My Bookings</a>
+        <a href="/" class="btn btn-outline-orange">🏠 Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><strong>Zappit</strong><p>© 2025 Zappit. All Rights Reserved.</p></footer>
+</body>
+</html>

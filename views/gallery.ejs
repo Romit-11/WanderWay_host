@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery – WanderWay</title>
+  <title>Gallery – Zappit</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -41,7 +41,7 @@
         <% galleries.forEach(g => { %>
           <div class="gallery-item sizzle-card">
             <a href="/gallery/<%= g._id %>">
-              <img src="/uploads/<%= g.images[0] %>" alt="Gallery cover">
+              <img src="<%= g.images[0] %>" alt="Gallery cover">
             </a>
             <p class="location">
               <i class="fa-solid fa-location-dot"></i>
@@ -64,8 +64,8 @@
   </div>
 
   <footer class="footer">
-    <strong>WanderWay</strong>
-    <p>© 2025 WanderWay. All Rights Reserved.</p>
+    <strong>Zappit</strong>
+    <p>© 2025 Zappit. All Rights Reserved.</p>
   </footer>
 
 </body>

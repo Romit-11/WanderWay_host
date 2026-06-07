@@ -1,5 +1,5 @@
 <nav class="navbar">
-  <div class="nav-left">WanderWay</div>
+  <a href="/" class="nav-left" style="-webkit-text-fill-color:transparent">Zappit</a>
 
   <!-- Desktop nav -->
   <div class="nav-right" id="navRight">
@@ -8,8 +8,13 @@
     <a href="/blog">Blog</a>
     <a href="/hotels">Hotels</a>
     <% if (user) { %>
-      <span style="margin-left:10px;color:var(--orange-light);font-weight:600;font-size:14px">Hi, <%= user.username %></span>
+      <a href="/hotel-owner/my-bookings">My Bookings</a>
+      <span style="color:var(--orange-light);font-weight:600;font-size:14px;padding:8px 10px">Hi, <%= user.username %></span>
       <a href="/logout">Logout</a>
+    <% } else if (hotelOwner) { %>
+      <a href="/hotel-owner/dashboard">My Dashboard</a>
+      <span style="color:var(--orange-light);font-weight:600;font-size:14px;padding:8px 10px">🏨 <%= hotelOwner.name %></span>
+      <a href="/hotel-owner/logout">Logout</a>
     <% } else { %>
       <a href="/login">Login</a>
     <% } %>
@@ -28,15 +33,20 @@
   <a href="/blog">Blog</a>
   <a href="/hotels">Hotels</a>
   <% if (user) { %>
+    <a href="/hotel-owner/my-bookings">📋 My Bookings</a>
     <a href="/logout">Logout (<%= user.username %>)</a>
+  <% } else if (hotelOwner) { %>
+    <a href="/hotel-owner/dashboard">🏨 My Dashboard</a>
+    <a href="/hotel-owner/logout">Logout (<%= hotelOwner.name %>)</a>
   <% } else { %>
     <a href="/login">Login</a>
+    <a href="/hotel-owner/register">🏨 List Your Hotel</a>
   <% } %>
 </div>
 
 <script>
 (function(){
-  var btn = document.getElementById('navToggle');
+  var btn    = document.getElementById('navToggle');
   var drawer = document.getElementById('navDrawer');
   if(btn && drawer){
     btn.addEventListener('click', function(){
