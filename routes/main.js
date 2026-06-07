@@ -164,9 +164,6 @@ router.get("/place/:id", async (req, res) => {
 });
 
 
-console.log("Weather API Key:", process.env.OPENWEATHER_API_KEY);
-
-
 // Hotels in trending places.
 
 router.get("/place/:id/hotels", async (req, res) => {
