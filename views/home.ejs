@@ -3,102 +3,243 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WanderWay – Your Ultimate Travel Companion</title>
+  <title>WanderWay – Discover Your Next Adventure</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ── Real-world hero with video-like parallax feel ── */
+    .ww-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 100px 28px 80px;
+      background:
+        url("https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80")
+        no-repeat center center / cover;
+      overflow: hidden;
+    }
+    .ww-hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        170deg,
+        rgba(28,25,23,.72) 0%,
+        rgba(120,44,0,.32) 55%,
+        rgba(28,25,23,.70) 100%
+      );
+    }
+    .ww-hero > * { position: relative; z-index: 1; }
+
+    /* Stats section — mountain road bg */
+    .ww-stats-bg {
+      background:
+        linear-gradient(rgba(28,25,23,.78), rgba(28,25,23,.78)),
+        url("https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&q=75")
+        center / cover no-repeat fixed;
+      padding: 80px 28px;
+    }
+
+    /* Trending section — ocean bg */
+    .ww-trending-bg {
+      background:
+        linear-gradient(rgba(13,27,50,.80), rgba(13,27,50,.80)),
+        url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=75")
+        center / cover no-repeat fixed;
+      padding: 80px 28px;
+      position: relative;
+    }
+
+    /* News section — city lights bg */
+    .ww-news-bg {
+      background:
+        linear-gradient(rgba(10,10,20,.82), rgba(10,10,20,.82)),
+        url("https://images.unsplash.com/photo-1514565131-fce0801e6915?w=1400&q=75")
+        center / cover no-repeat fixed;
+      padding: 80px 28px;
+    }
+
+    /* Stats boxes */
+    .ww-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .ww-stat-box {
+      background: rgba(255,255,255,.09);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--r-lg);
+      padding: 32px 20px;
+      text-align: center;
+      transition: transform .25s ease, background .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .ww-stat-box::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--orange), var(--yellow));
+    }
+    .ww-stat-box:hover {
+      transform: translateY(-6px);
+      background: rgba(255,255,255,.14);
+    }
+    .ww-stat-box i   { font-size: 32px; color: var(--orange-light); margin-bottom: 12px; display: block; }
+    .ww-stat-box h2  { font-family: var(--fd); font-size: 44px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 6px; }
+    .ww-stat-box p   { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: 1.5px; }
+
+    /* Show "—" if zero (nothing added yet) */
+    .stat-zero { color: rgba(255,255,255,.35) !important; font-size: 28px !important; }
+
+    /* Section title on dark */
+    .ww-section-head { text-align: center; margin-bottom: 44px; position: relative; z-index: 1; }
+    .ww-section-head .section-label { color: var(--orange-light); }
+    .ww-section-head h2 { font-family: var(--fd); font-size: clamp(26px,4vw,44px); font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .ww-section-head p  { font-size: 15px; color: rgba(255,255,255,.72); max-width: 520px; margin: 0 auto; }
+
+    /* Trending grid */
+    .ww-trend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* News grid */
+    .ww-news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media(max-width: 600px) {
+      .ww-stats-grid    { grid-template-columns: 1fr 1fr; gap: 14px; }
+      .ww-stat-box h2   { font-size: 32px; }
+      .ww-stat-box      { padding: 22px 14px; }
+      .ww-trend-grid,
+      .ww-news-grid     { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
   <%- include("partials/navbar") %>
 
-  <!-- ── HERO ── -->
-  <section class="hero hero-bg">
-    <div class="hero-eyebrow">Discover the World</div>
-    <h1>Your Ultimate<br><em>Travel Companion</em></h1>
-    <p>Explore breathtaking destinations, share your memories, and find perfect stays — all in one vibrant place.</p>
-    <div class="hero-actions">
-      <a href="#trending" class="explore-btn">Explore Now</a>
-      <a href="/gallery" class="btn btn-outline-orange" style="padding:15px 34px;font-size:15px">View Gallery</a>
+  <!-- ════════════ HERO ════════════ -->
+  <section class="ww-hero">
+    <div class="hero-eyebrow">Your Journey Starts Here</div>
+    <h1 style="font-family:var(--fd);font-size:clamp(40px,7vw,86px);font-weight:800;color:#fff;line-height:1.02;text-shadow:0 4px 24px rgba(0,0,0,.28);margin-bottom:22px;animation:fadeUp .4s ease both">
+      Wander Far,<br><em style="font-style:italic;font-weight:400;background:linear-gradient(135deg,var(--orange-light),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Find Your Way</em>
+    </h1>
+    <p style="font-size:clamp(15px,2vw,19px);color:rgba(255,255,255,.87);max-width:560px;margin-bottom:40px;line-height:1.78;animation:fadeUp .45s .1s ease both">
+      Explore breathtaking destinations, share your memories, and find perfect stays — all in one place.
+    </p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;animation:fadeUp .45s .18s ease both">
+      <a href="#trending" class="explore-btn">Explore Places</a>
+      <a href="/gallery" class="btn btn-outline-orange" style="padding:15px 34px;font-size:15px;animation:none">View Gallery</a>
     </div>
     <div class="hero-scroll">Scroll</div>
   </section>
 
-  <!-- ── COUNTERS ── -->
-  <section class="counter-bg reveal">
-    <div style="text-align:center;margin-bottom:44px;position:relative;z-index:1">
-      <span class="section-label">Our Impact</span>
-      <h2 class="section-title on-dark">Trusted by Travellers Worldwide</h2>
-      <div class="spice-divider"></div>
+  <!-- ════════════ REAL STATS ════════════ -->
+  <section class="ww-stats-bg zp-fade-section">
+    <div class="ww-section-head">
+      <span class="section-label" style="color:var(--orange-light)">Live on WanderWay</span>
+      <h2>Everything You Need to Explore</h2>
     </div>
-    <div class="counter-section">
-      <div class="counter-box">
+    <div class="ww-stats-grid">
+      <div class="ww-stat-box">
         <i class="fa-solid fa-map-location-dot"></i>
-        <h2 class="counter" data-target="120">0</h2>
-        <p>Destinations</p>
+        <h2 class="<%= stats.places === 0 ? 'stat-zero' : '' %>">
+          <%= stats.places > 0 ? stats.places : '—' %>
+        </h2>
+        <p>Trending Places</p>
       </div>
-      <div class="counter-box">
-        <i class="fa-solid fa-image"></i>
-        <h2 class="counter" data-target="850">0</h2>
+      <div class="ww-stat-box">
+        <i class="fa-solid fa-images"></i>
+        <h2 class="<%= stats.galleries === 0 ? 'stat-zero' : '' %>">
+          <%= stats.galleries > 0 ? stats.galleries : '—' %>
+        </h2>
         <p>Travel Memories</p>
       </div>
-      <div class="counter-box">
+      <div class="ww-stat-box">
         <i class="fa-solid fa-hotel"></i>
-        <h2 class="counter" data-target="300">0</h2>
+        <h2 class="<%= stats.hotels === 0 ? 'stat-zero' : '' %>">
+          <%= stats.hotels > 0 ? stats.hotels : '—' %>
+        </h2>
         <p>Hotels Listed</p>
       </div>
-      <div class="counter-box">
-        <i class="fa-solid fa-face-smile"></i>
-        <h2 class="counter" data-target="1500">0</h2>
-        <p>Happy Travellers</p>
+      <div class="ww-stat-box">
+        <i class="fa-solid fa-pen-nib"></i>
+        <h2 class="<%= stats.blogs === 0 ? 'stat-zero' : '' %>">
+          <%= stats.blogs > 0 ? stats.blogs : '—' %>
+        </h2>
+        <p>Travel Stories</p>
       </div>
     </div>
   </section>
 
-  <!-- ── TRENDING ── -->
-  <section id="trending" class="trending-bg reveal">
-    <div style="text-align:center;margin-bottom:44px;position:relative;z-index:1">
-      <span class="section-label">Trending Now</span>
-      <h2 class="section-title on-dark">🌍 Trending Places</h2>
-      <div class="spice-divider"></div>
-      <p class="section-sub on-dark">Hand-picked destinations loved by our community of explorers.</p>
+  <!-- ════════════ TRENDING PLACES ════════════ -->
+  <section id="trending" class="ww-trending-bg zp-fade-section">
+    <div class="ww-section-head">
+      <span class="section-label" style="color:var(--orange-light)">Trending Now</span>
+      <h2>🌍 Trending Places</h2>
+      <p>Hand-picked destinations loved by our community of explorers.</p>
     </div>
 
-    <div class="trending-container">
-      <% trending.forEach(t => { %>
-        <a href="/place/<%= t._id %>" class="trend-card" style="text-decoration:none;color:inherit">
-          <div class="trend-card-img">
-            <img src="<%= t.images[0] %>" alt="<%= t.name %>">
-            <div class="trend-overlay">
-              <h3><%= t.name %></h3>
-              <p><%= t.location %></p>
+    <% if(trending && trending.length > 0){ %>
+      <div class="ww-trend-grid">
+        <% trending.forEach((t, i) => { %>
+          <a href="/place/<%= t._id %>"
+             class="trend-card zp-card-reveal"
+             style="text-decoration:none;color:inherit;transition-delay:<%= i * 0.06 %>s">
+            <div class="trend-card-img">
+              <img src="<%- t.images[0] && t.images[0].startsWith('http') ? t.images[0] : '/uploads/' + t.images[0] %>"
+                   alt="<%= t.name %>" loading="lazy">
+              <div class="trend-overlay">
+                <h3><%= t.name %></h3>
+                <p><%= t.location %></p>
+              </div>
             </div>
-          </div>
-          <div class="trend-card-body">
-            <h3><%= t.name %></h3>
-            <p><i class="fa-solid fa-location-dot" style="color:var(--red)"></i> <%= t.location %></p>
-            <div class="trend-rating">★★★★★ <span style="color:var(--text-faint);font-weight:400">&nbsp;Top Rated</span></div>
-          </div>
-        </a>
-      <% }) %>
-    </div>
+            <div class="trend-card-body">
+              <h3><%= t.name %></h3>
+              <p><i class="fa-solid fa-location-dot" style="color:var(--red)"></i> <%= t.location %></p>
+              <div class="trend-rating">★★★★★ <span style="color:var(--text-faint);font-weight:400">&nbsp;Featured</span></div>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p style="color:rgba(255,255,255,.65);text-align:center;font-size:16px;padding:40px 0">
+        No trending places added yet. Check back soon! 🌏
+      </p>
+    <% } %>
   </section>
 
-  <!-- ── NEWS ── -->
-  <section class="news-bg reveal" style="background-color:#1c1917">
-    <div style="text-align:center;margin-bottom:44px;position:relative;z-index:1">
+  <!-- ════════════ TRAVEL NEWS ════════════ -->
+  <section class="ww-news-bg zp-fade-section">
+    <div class="ww-section-head">
       <span class="section-label" style="color:var(--orange-light)">Latest Stories</span>
-      <h2 class="section-title on-dark">📰 Travel &amp; Hotel News</h2>
-      <div class="spice-divider"></div>
-      <p class="section-sub on-dark">Fresh stories and tips to fuel your next adventure.</p>
+      <h2>📰 Travel News &amp; Inspiration</h2>
+      <p>Fresh stories and tips to fuel your next adventure.</p>
     </div>
 
-    <% if (travelNews && travelNews.length > 0) { %>
-      <div class="news-container">
-        <% travelNews.forEach(news => { %>
-          <div class="news-card">
-            <% if (news.image) { %>
+    <% if(travelNews && travelNews.length > 0){ %>
+      <div class="ww-news-grid">
+        <% travelNews.forEach((news, i) => { %>
+          <div class="news-card zp-card-reveal" style="transition-delay:<%= i * 0.06 %>s">
+            <% if(news.image){ %>
               <div class="news-card-img">
-                <img src="<%= news.image %>" alt="news">
+                <img src="<%= news.image %>" alt="news" loading="lazy">
                 <span class="news-tag">Travel</span>
               </div>
             <% } %>
@@ -111,53 +252,30 @@
         <% }) %>
       </div>
     <% } else { %>
-      <p class="empty-msg" style="color:rgba(255,255,255,.6)">No travel news available right now.</p>
+      <p style="color:rgba(255,255,255,.55);text-align:center;font-size:15px;padding:40px 0">
+        No travel news available right now.
+      </p>
     <% } %>
   </section>
 
-  <!-- ── WHY WanderWay ── -->
-  <section class="section reveal" style="max-width:900px;margin:60px auto">
-    <h2>Why Choose WanderWay? ✈️</h2>
-    <p>We make your travel easy and memorable. From beautiful destinations to luxurious hotels, WanderWay is your one-stop travel partner.</p>
-  </section>
-
-  <!-- ── FOOTER ── -->
+  <!-- ════════════ FOOTER ════════════ -->
   <footer class="footer">
     <strong>WanderWay</strong>
     <p>© 2025 WanderWay. All Rights Reserved.</p>
   </footer>
 
   <script>
-  // Counter animation
-  const counters = document.querySelectorAll('.counter');
-  let counterStarted = false;
-  function startCounters() {
-    if (counterStarted) return;
-    counterStarted = true;
-    counters.forEach(counter => {
-      const target = +counter.getAttribute('data-target');
-      let count = 0;
-      const increment = target / 180;
-      const update = () => {
-        count += increment;
-        if (count < target) { counter.innerText = Math.ceil(count); requestAnimationFrame(update); }
-        else { counter.innerText = target.toLocaleString(); }
-      };
-      update();
+  // Fast Intersection Observer — fires as soon as 8% is visible
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add("zp-visible");
+        io.unobserve(e.target);
+      }
     });
-  }
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const revealOnScroll = () => {
-    reveals.forEach(el => {
-      if (el.getBoundingClientRect().top < window.innerHeight - 100)
-        el.classList.add('active');
-    });
-    const cs = document.querySelector('.counter-section');
-    if (cs && cs.getBoundingClientRect().top < window.innerHeight - 100) startCounters();
-  };
-  window.addEventListener('scroll', revealOnScroll);
-  revealOnScroll();
+  }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
+
+  document.querySelectorAll(".zp-fade-section, .zp-card-reveal").forEach(el => io.observe(el));
   </script>
 
 </body>

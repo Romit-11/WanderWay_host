@@ -1,41 +1,41 @@
-const cloudinary              = require("cloudinary").v2;
-const { CloudinaryStorage }   = require("multer-storage-cloudinary");
-const multer                  = require("multer");
+const cloudinary            = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer                = require("multer");
 
-// Configure Cloudinary with env credentials
+// Configure with env credentials
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key:    process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Storage for gallery images
+// Gallery images
 const galleryStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder:         "WanderWay/gallery",
-    allowed_formats:["jpg","jpeg","png","webp", "avif"],
-    transformation: [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
+    folder:          "wanderway/gallery",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation:  [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
   }
 });
 
-// Storage for hotel images
+// Hotel images
 const hotelStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder:         "WanderWay/hotels",
-    allowed_formats:["jpg","jpeg","png","webp","avif"],
-    transformation: [{ width: 1400, height: 1000, crop: "limit", quality: "auto" }]
+    folder:          "wanderway/hotels",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation:  [{ width: 1400, height: 1000, crop: "limit", quality: "auto" }]
   }
 });
 
-// Storage for trending place images
+// Trending place images
 const trendingStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder:         "WanderWay/trending",
-    allowed_formats:["jpg","jpeg","png","webp","avif"],
-    transformation: [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
+    folder:          "wanderway/trending",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    transformation:  [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
   }
 });
 

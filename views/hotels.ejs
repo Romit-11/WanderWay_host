@@ -39,7 +39,7 @@
           <a href="/hotel-owner/hotel/<%= hotel._id %>" class="hcard">
             <div class="hcard-img">
               <% if(hotel.images && hotel.images.length>0){ %>
-                <img src="<%= hotel.images[0] %>" alt="<%= hotel.name %>">
+                <img src="<%- hotel.images[0] && hotel.images[0].startsWith('http') ? hotel.images[0] : '/uploads/' + hotel.images[0] %>" alt="<%= hotel.name %>">
               <% } else { %>
                 <div class="hcard-img-placeholder">🏨</div>
               <% } %>

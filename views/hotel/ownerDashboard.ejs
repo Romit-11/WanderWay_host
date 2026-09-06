@@ -61,7 +61,7 @@
           <% hotels.forEach(h=>{ %>
             <div class="admin-card">
               <% if(h.images && h.images.length>0){ %>
-                <img src="<%= h.images[0] %>" alt="<%= h.name %>">
+                <img src="<%- h.images[0] && h.images[0].startsWith('http') ? h.images[0] : '/uploads/' + h.images[0] %>" alt="<%= h.name %>">
               <% } else { %>
                 <div style="width:100%;height:150px;background:rgba(255,255,255,.1);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:36px">🏨</div>
               <% } %>

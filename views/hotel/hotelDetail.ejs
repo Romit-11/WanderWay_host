@@ -126,7 +126,7 @@
   <!-- ── HERO ── -->
   <div class="hd-hero">
     <% if(hotel.images && hotel.images.length>0){ %>
-      <img class="hd-hero-img" src="<%= hotel.images[0] %>" alt="<%= hotel.name %>">
+      <img class="hd-hero-img" src="<%- hotel.images[0] && hotel.images[0].startsWith('http') ? hotel.images[0] : '/uploads/' + hotel.images[0] %>" alt="<%= hotel.name %>">
     <% } else { %>
       <div class="hd-hero-placeholder">🏨</div>
     <% } %>
@@ -161,7 +161,7 @@
         <div class="gallery-scroll-wrap">
           <div class="gallery-scroll" id="galleryScroll">
             <% hotel.images.forEach((img,i)=>{ %>
-              <img src="<%= img %>"
+              <img src="<%- img && img.startsWith('http') ? img : '/uploads/' + img %>"
                    alt="hotel photo <%= i+1 %>"
                    onclick="openLightbox(<%= i %>)"
                    class="<%= i===0?'active-img':'' %>">

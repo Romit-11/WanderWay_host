@@ -27,7 +27,7 @@
     <div class="details-gallery">
       <% gallery.images.forEach(img => { %>
         <div class="details-image">
-          <img src="<%= img %>" alt="Gallery Image">
+          <img src="<%- img && img.startsWith('http') ? img : '/uploads/' + img %>" alt="Gallery Image">
         </div>
       <% }) %>
     </div>

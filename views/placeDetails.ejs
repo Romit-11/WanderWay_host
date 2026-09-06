@@ -34,7 +34,7 @@
     <div class="section-heading">Photos</div>
     <div class="images-gallery">
       <% place.images.forEach(img => { %>
-        <img src="<%= img %>" alt="<%= place.name %>">
+        <img src="<%- img && img.startsWith('http') ? img : '/uploads/' + img %>" alt="<%= place.name %>">
       <% }) %>
     </div>
 

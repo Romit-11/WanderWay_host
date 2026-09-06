@@ -80,7 +80,7 @@
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Current: <%= hotel.images.length %> photo(s). Upload more below.</p>
         <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px">
           <% hotel.images.forEach(img=>{ %>
-            <img src="<%= img %>" style="width:100px;height:70px;object-fit:cover;border-radius:var(--r-sm);flex-shrink:0">
+            <img src="<%- img && img.startsWith('http') ? img : '/uploads/' + img %>" style="width:100px;height:70px;object-fit:cover;border-radius:var(--r-sm);flex-shrink:0">
           <% }) %>
         </div>
         <input type="file" name="newImages" accept="image/*" multiple style="font-family:var(--fb);font-size:14px">

@@ -41,7 +41,7 @@
         <% galleries.forEach(g => { %>
           <div class="gallery-item sizzle-card">
             <a href="/gallery/<%= g._id %>">
-              <img src="<%= g.images[0] %>" alt="Gallery cover">
+              <img src="<%- g.images[0] && g.images[0].startsWith('http') ? g.images[0] : '/uploads/' + g.images[0] %>" alt="Gallery cover">
             </a>
             <p class="location">
               <i class="fa-solid fa-location-dot"></i>
