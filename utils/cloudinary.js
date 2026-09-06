@@ -1,59 +1,41 @@
-const cloudinary            = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const multer                = require("multer");
+const cloudinary              = require("cloudinary").v2;
+const { CloudinaryStorage }   = require("multer-storage-cloudinary");
+const multer                  = require("multer");
 
-// Configure with env credentials
+// Configure Cloudinary with env credentials
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key:    process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// Gallery images
+// Storage for gallery images
 const galleryStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-<<<<<<< HEAD
-    folder:          "wanderway/gallery",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation:  [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
-=======
-    folder:         "zappit/gallery",
+    folder:         "WanderWay/gallery",
     allowed_formats:["jpg","jpeg","png","webp", "avif"],
     transformation: [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
->>>>>>> parent of dda0677 (Hotel owners)
   }
 });
 
-// Hotel images
+// Storage for hotel images
 const hotelStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-<<<<<<< HEAD
-    folder:          "wanderway/hotels",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation:  [{ width: 1400, height: 1000, crop: "limit", quality: "auto" }]
-=======
-    folder:         "zappit/hotels",
+    folder:         "WanderWay/hotels",
     allowed_formats:["jpg","jpeg","png","webp","avif"],
     transformation: [{ width: 1400, height: 1000, crop: "limit", quality: "auto" }]
->>>>>>> parent of dda0677 (Hotel owners)
   }
 });
 
-// Trending place images
+// Storage for trending place images
 const trendingStorage = new CloudinaryStorage({
   cloudinary,
   params: {
-<<<<<<< HEAD
-    folder:          "wanderway/trending",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    transformation:  [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
-=======
-    folder:         "zappit/trending",
+    folder:         "WanderWay/trending",
     allowed_formats:["jpg","jpeg","png","webp","avif"],
     transformation: [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
->>>>>>> parent of dda0677 (Hotel owners)
   }
 });
 

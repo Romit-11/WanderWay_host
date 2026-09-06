@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Book <%= hotel.name %> – Zappit</title>
+  <title>Book <%= hotel.name %> – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -97,7 +97,7 @@
       <h3>🧾 Booking Summary</h3>
 
       <% if(hotel.images && hotel.images.length>0){ %>
-        <img src="<%- hotel.images[0] && hotel.images[0].startsWith('http') ? hotel.images[0] : '/uploads/' + hotel.images[0] %>" style="width:100%;height:140px;object-fit:cover;border-radius:var(--r-md);margin-bottom:14px">
+        <img src="<%= hotel.images[0] %>" style="width:100%;height:140px;object-fit:cover;border-radius:var(--r-md);margin-bottom:14px">
       <% } %>
 
       <div class="summary-row"><span style="color:var(--text-muted)">Hotel</span><strong><%= hotel.name %></strong></div>
@@ -120,7 +120,7 @@
 
   </div>
 
-  <footer class="footer"><strong>Zappit</strong><p>© 2025 Zappit. All Rights Reserved.</p></footer>
+  <footer class="footer"><strong>WanderWay</strong><p>© 2025 WanderWay. All Rights Reserved.</p></footer>
 
   <script>
   const hotelId   = "<%= hotel._id %>";
@@ -226,7 +226,7 @@
         key:         razorKey,
         amount:      data.amount,
         currency:    "INR",
-        name:        "Zappit Travel",
+        name:        "WanderWay Travel",
         description: `${roomType} – ${rooms} room(s)`,
         order_id:    data.orderId,
         prefill:     { name: userName, email: email, contact: phone },

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title><%= hotel.name %> – Zappit</title>
+  <title><%= hotel.name %> – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
@@ -126,7 +126,7 @@
   <!-- ── HERO ── -->
   <div class="hd-hero">
     <% if(hotel.images && hotel.images.length>0){ %>
-      <img class="hd-hero-img" src="<%- hotel.images[0] && hotel.images[0].startsWith('http') ? hotel.images[0] : '/uploads/' + hotel.images[0] %>" alt="<%= hotel.name %>">
+      <img class="hd-hero-img" src="<%= hotel.images[0] %>" alt="<%= hotel.name %>">
     <% } else { %>
       <div class="hd-hero-placeholder">🏨</div>
     <% } %>
@@ -161,7 +161,7 @@
         <div class="gallery-scroll-wrap">
           <div class="gallery-scroll" id="galleryScroll">
             <% hotel.images.forEach((img,i)=>{ %>
-              <img src="<%- img && img.startsWith('http') ? img : '/uploads/' + img %>"
+              <img src="<%= img %>"
                    alt="hotel photo <%= i+1 %>"
                    onclick="openLightbox(<%= i %>)"
                    class="<%= i===0?'active-img':'' %>">
@@ -305,7 +305,7 @@
     <button class="lightbox-nav lightbox-next" onclick="shiftLightbox(1)">›</button>
   </div>
 
-  <footer class="footer"><strong>Zappit</strong><p>© 2025 Zappit. All Rights Reserved.</p></footer>
+  <footer class="footer"><strong>WanderWay</strong><p>© 2025 WanderWay. All Rights Reserved.</p></footer>
 
   <script>
   // ── Gallery drag-to-scroll ──

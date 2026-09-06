@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin – Gallery – Zappit</title>
+  <title>Admin – Gallery – WanderWay</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body class="admin-bg">
@@ -20,7 +20,7 @@
     <div class="admin-grid">
       <% galleries.forEach(g => { %>
         <div class="admin-card">
-          <img src="<%- g.images[0] && g.images[0].startsWith('http') ? g.images[0] : '/uploads/' + g.images[0] %>" alt="">
+          <img src="<%= g.images[0] %>" alt="">
           <h3>📍 <%= g.location %></h3>
           <p>By <%= g.uploadedBy %></p>
           <form action="/admin/galleries/delete/<%= g._id %>" method="POST" style="margin-top:auto">

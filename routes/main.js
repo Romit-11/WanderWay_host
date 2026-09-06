@@ -6,8 +6,6 @@ const User = require("../models/User");
 const Blog = require("../models/Blog");
 const Hotel = require("../models/Hotel");
 const TrendingPlace = require("../models/TrendingPlace");
-const Gallery       = require("../models/Gallery");
-const Booking       = require("../models/Booking");
 
 const router = express.Router();
 
@@ -23,24 +21,12 @@ function requireLogin(req, res, next) {
 // Home Page
 router.get("/", async (req, res) => {
   try {
-    // Fetch real counts from DB in parallel
-    const [trending, placesCount, galleriesCount, hotelsCount, blogsCount] = await Promise.all([
-      TrendingPlace.find().sort({ createdAt: -1 }),
-      TrendingPlace.countDocuments(),
-      Gallery.countDocuments(),
-      Hotel.countDocuments({ active: true }),
-      Blog.countDocuments()
-    ]);
-
-    const stats = {
-      places:    placesCount,
-      galleries: galleriesCount,
-      hotels:    hotelsCount,
-      blogs:     blogsCount
-    };
+    // Trending places from DB
+    const trending = await TrendingPlace.find();
 
     // Travel News API
     let travelNews = [];
+
     try {
       const newsRes = await axios.get("https://gnews.io/api/v4/search", {
         params: {
@@ -51,6 +37,7 @@ router.get("/", async (req, res) => {
           apikey: process.env.GNEWS_API_KEY
         }
       });
+
       travelNews = newsRes.data.articles || [];
     } catch (err) {
       console.log("News API error:", err.response?.status);
@@ -59,17 +46,15 @@ router.get("/", async (req, res) => {
     res.render("home", {
       user: req.session.user,
       trending,
-      travelNews,
-      stats
+      travelNews
     });
 
   } catch (err) {
     console.log(err);
     res.render("home", {
       user: req.session.user,
-      trending:    [],
-      travelNews:  [],
-      stats: { places: 0, galleries: 0, hotels: 0, blogs: 0 }
+      trending: [],
+      travelNews: []
     });
   }
 });
@@ -177,9 +162,6 @@ router.get("/place/:id", async (req, res) => {
     res.send("Error loading details");
   }
 });
-
-
-console.log("Weather API Key:", process.env.OPENWEATHER_API_KEY);
 
 
 // Hotels in trending places.
