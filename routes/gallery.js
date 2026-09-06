@@ -44,7 +44,11 @@ router.post("/delete/:id", async (req, res) => {
     // Delete each image from Cloudinary
     for (const url of gallery.images) {
       try {
+<<<<<<< HEAD
         // Extract public_id from URL: .../wanderway/gallery/filename
+=======
+        // Extract public_id from URL: .../zappit/gallery/filename
+>>>>>>> parent of dda0677 (Hotel owners)
         const parts    = url.split("/");
         const file     = parts[parts.length - 1].split(".")[0];
         const folder   = parts[parts.length - 2];

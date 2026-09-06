@@ -13,9 +13,15 @@ cloudinary.config({
 const galleryStorage = new CloudinaryStorage({
   cloudinary,
   params: {
+<<<<<<< HEAD
     folder:          "wanderway/gallery",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
     transformation:  [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
+=======
+    folder:         "zappit/gallery",
+    allowed_formats:["jpg","jpeg","png","webp", "avif"],
+    transformation: [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
+>>>>>>> parent of dda0677 (Hotel owners)
   }
 });
 
@@ -23,9 +29,15 @@ const galleryStorage = new CloudinaryStorage({
 const hotelStorage = new CloudinaryStorage({
   cloudinary,
   params: {
+<<<<<<< HEAD
     folder:          "wanderway/hotels",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
     transformation:  [{ width: 1400, height: 1000, crop: "limit", quality: "auto" }]
+=======
+    folder:         "zappit/hotels",
+    allowed_formats:["jpg","jpeg","png","webp","avif"],
+    transformation: [{ width: 1400, height: 1000, crop: "limit", quality: "auto" }]
+>>>>>>> parent of dda0677 (Hotel owners)
   }
 });
 
@@ -33,9 +45,15 @@ const hotelStorage = new CloudinaryStorage({
 const trendingStorage = new CloudinaryStorage({
   cloudinary,
   params: {
+<<<<<<< HEAD
     folder:          "wanderway/trending",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
     transformation:  [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
+=======
+    folder:         "zappit/trending",
+    allowed_formats:["jpg","jpeg","png","webp","avif"],
+    transformation: [{ width: 1200, height: 900, crop: "limit", quality: "auto" }]
+>>>>>>> parent of dda0677 (Hotel owners)
   }
 });
 
