@@ -6,6 +6,7 @@ const User = require("../models/User");
 const Blog = require("../models/Blog");
 const Hotel = require("../models/Hotel");
 const TrendingPlace = require("../models/TrendingPlace");
+const Gallery = require("../models/Gallery");
 
 const router = express.Router();
 
