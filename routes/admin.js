@@ -112,7 +112,7 @@ router.get("/add-trending", (req, res) => {
 router.post("/add-trending", uploadTrending.array("images", 10), async (req, res) => {
   if (!req.session.admin) return res.redirect("/admin/login");
 
-  const images = req.files.map(f => f.filename);
+  const images = req.files.map(f => f.path);
 
   await TrendingPlace.create({
     name: req.body.name,
