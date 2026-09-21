@@ -19,14 +19,77 @@ function requireLogin(req, res, next) {
 
 
 // Home Page
+// router.get("/", async (req, res) => {
+//   try {
+//     // Trending places from DB
+//     const trending = await TrendingPlace.find();
+
+
+//     const stats = {
+//       places:    placesCount,
+//       galleries: galleriesCount,
+//       hotels:    hotelsCount,
+//       blogs:     blogsCount
+//     };
+
+//     // Travel News API
+//     let travelNews = [];
+
+//     try {
+//       const newsRes = await axios.get("https://gnews.io/api/v4/search", {
+//         params: {
+//           q: "travel tourism hotels",
+//           lang: "en",
+//           country: "in",
+//           max: 6,
+//           apikey: process.env.GNEWS_API_KEY
+//         }
+//       });
+
+//       travelNews = newsRes.data.articles || [];
+//     } catch (err) {
+//       console.log("News API error:", err.response?.status);
+//     }
+
+//     res.render("home", {
+//       user: req.session.user,
+//       trending,
+//       travelNews
+//     });
+
+//   } catch (err) {
+//     console.log(err);
+//     res.render("home", {
+//       user: req.session.user,
+//       trending: [],
+//       travelNews: []
+//     });
+//   }
+// });
+
+
+// For real stats updated home page api.
+
 router.get("/", async (req, res) => {
   try {
-    // Trending places from DB
-    const trending = await TrendingPlace.find();
+    // Fetch real counts from DB in parallel
+    const [trending, placesCount, galleriesCount, hotelsCount, blogsCount] = await Promise.all([
+      TrendingPlace.find().sort({ createdAt: -1 }),
+      TrendingPlace.countDocuments(),
+      Gallery.countDocuments(),
+      Hotel.countDocuments({ active: true }),
+      Blog.countDocuments()
+    ]);
+
+    const stats = {
+      places:    placesCount,
+      galleries: galleriesCount,
+      hotels:    hotelsCount,
+      blogs:     blogsCount
+    };
 
     // Travel News API
     let travelNews = [];
-
     try {
       const newsRes = await axios.get("https://gnews.io/api/v4/search", {
         params: {
@@ -37,7 +100,6 @@ router.get("/", async (req, res) => {
           apikey: process.env.GNEWS_API_KEY
         }
       });
-
       travelNews = newsRes.data.articles || [];
     } catch (err) {
       console.log("News API error:", err.response?.status);
@@ -46,15 +108,17 @@ router.get("/", async (req, res) => {
     res.render("home", {
       user: req.session.user,
       trending,
-      travelNews
+      travelNews,
+      stats
     });
 
   } catch (err) {
     console.log(err);
     res.render("home", {
       user: req.session.user,
-      trending: [],
-      travelNews: []
+      trending:    [],
+      travelNews:  [],
+      stats: { places: 0, galleries: 0, hotels: 0, blogs: 0 }
     });
   }
 });

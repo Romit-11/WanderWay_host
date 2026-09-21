@@ -24,7 +24,7 @@
   </section>
 
   <!-- ── COUNTERS ── -->
-  <section class="counter-bg reveal">
+  <!-- <section class="counter-bg reveal">
     <div style="text-align:center;margin-bottom:44px;position:relative;z-index:1">
       <span class="section-label">Our Impact</span>
       <h2 class="section-title on-dark">Trusted by Travellers Worldwide</h2>
@@ -50,6 +50,45 @@
         <i class="fa-solid fa-face-smile"></i>
         <h2 class="counter" data-target="1500">0</h2>
         <p>Happy Travellers</p>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Real Stats -->
+
+  <section class="ww-stats-bg zp-fade-section">
+    <div class="ww-section-head">
+      <span class="section-label" style="color:var(--orange-light)">Live on WanderWay</span>
+      <h2>Everything You Need to Explore</h2>
+    </div>
+    <div class="ww-stats-grid">
+      <div class="ww-stat-box">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <h2 class="<%= stats.places === 0 ? 'stat-zero' : '' %>">
+          <%= stats.places > 0 ? stats.places : '—' %>
+        </h2>
+        <p>Trending Places</p>
+      </div>
+      <div class="ww-stat-box">
+        <i class="fa-solid fa-images"></i>
+        <h2 class="<%= stats.galleries === 0 ? 'stat-zero' : '' %>">
+          <%= stats.galleries > 0 ? stats.galleries : '—' %>
+        </h2>
+        <p>Travel Memories</p>
+      </div>
+      <div class="ww-stat-box">
+        <i class="fa-solid fa-hotel"></i>
+        <h2 class="<%= stats.hotels === 0 ? 'stat-zero' : '' %>">
+          <%= stats.hotels > 0 ? stats.hotels : '—' %>
+        </h2>
+        <p>Hotels Listed</p>
+      </div>
+      <div class="ww-stat-box">
+        <i class="fa-solid fa-pen-nib"></i>
+        <h2 class="<%= stats.blogs === 0 ? 'stat-zero' : '' %>">
+          <%= stats.blogs > 0 ? stats.blogs : '—' %>
+        </h2>
+        <p>Travel Stories</p>
       </div>
     </div>
   </section>
